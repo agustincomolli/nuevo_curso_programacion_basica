@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piedra, papel o tijera.</title>
+    <script>
+        function aleatorio(min, max) {
+            /* 
+                DESCRIPTION: Genera un número aleatorio entre el min y el max.
+                PARAMETERS:
+                            min = valor mínimo
+                            max = valor máximo
+            */
+            return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+
+
+        // 1 = piedra, 2 = papel, 3 = tijera
+        let player = 0
+        let pc = 0
+
+        player = prompt("Elige:\n1 - Piedra 🪨\n2 - Papel 🧻\n3 - Tijera ✂️")
+        message = "Elegiste "
+        if (player == 1) {
+            message += "Piedra 🪨"
+        } else if (player == 2) {
+            message += "Papel 🧻"
+        } else if (player == 3) {
+            message += "Tijera ✂️"
+        } else {
+            message += "cualquier cosa 😒"
+        }
+        alert(message)
+
+        // Generar un número aleatorio entre 1 y 3.
+        pc = aleatorio(1, 3)
+        message = "La PC eligió "
+        if (pc == 1) {
+            message += "Piedra 🪨"
+        } else if (pc == 2) {
+            message += "Papel 🧻"
+        } else if (pc == 3) {
+            message += "Tijera ✂️"
+        }
+        alert(message)
+
+        // Combate.
+        if (player == pc) {
+            message = "¡Empate! 😐"
+        } else if (player == 1 && pc == 3) {
+            message = "¡Ganaste! 😎"
+        } else if (player == 2 && pc == 1) {
+            message = "¡Ganaste! 😎"
+        } else if (player == 3 && pc == 2) {
+            message = "¡Ganaste! 😎"
+        } else {
+            message = "¡Perdiste! 😢"
+        }
+        alert(message)
+    </script>
+</head>
+
+<body>
+    <h1>¿Piedra 🪨, Papel 🧻 o Tijera ✂️?</h1>
+</body>
+
+</html>
