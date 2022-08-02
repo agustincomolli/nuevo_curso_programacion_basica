@@ -1,2 +1,3 @@
-# nuevo_curso_programacion_basica
-Nuevo curso de programación básica de Platzi
+# Nuevo curso de programación básica de Platzi
+
+Acá todos los ejercicios del curso.
