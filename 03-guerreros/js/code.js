@@ -23,9 +23,13 @@ function select_warrior() {
         warrior_selected = "Arquero"
     } else if (rd_mage.checked) {
         warrior_selected = "Mago"
+    } else {
+        alert("Debes seleccionar un guerrero para luchar")
+        return // Salir de la función.
     }
     alert("Has seleccionado al " + warrior_selected)
 }
 
 
+// Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
