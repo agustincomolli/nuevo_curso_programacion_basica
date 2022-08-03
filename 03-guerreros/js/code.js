@@ -15,6 +15,7 @@ function select_warrior() {
     let rd_knight = document.getElementById("rd-knight")
     let rd_archer = document.getElementById("rd-archer")
     let rd_mage = document.getElementById("rd-mage")
+    let spn_player = document.getElementById("spn-player")
     let warrior_selected = ""
 
     if (rd_knight.checked) {
@@ -27,6 +28,7 @@ function select_warrior() {
         alert("Debes seleccionar un guerrero para luchar")
         return // Salir de la función.
     }
+    spn_player.innerHTML = warrior_selected
     alert("Has seleccionado al " + warrior_selected)
 }
 
