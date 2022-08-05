@@ -25,7 +25,7 @@ function select_enemy() {
     } else if (enemy_number == 2) {
         enemy_name = "Orco"
     } else {
-        enemy_name = "Rey esqueleto"
+        enemy_name = "Rey Esqueleto"
     }
 
     spn_enemy.innerHTML = enemy_name
@@ -60,59 +60,117 @@ function select_warrior() {
 }
 
 
-function show_status() {
+function lets_combat(player, enemy) {
+    /* 
+        DESCRIPTION: Devuelve un entero con el resultado del juego.
+                     Si es 0 es empate, si es 1 gana player y si
+                     es 2 gana enemy.
+        PARAMETERS:
+                    player = identifica el ataque del jugador.
+                    enemy = identifica el ataque del enemigo.
+                    1 = fuego, 2 = viento y 3 = tierra
+    */
+    let result = 0
+
+    if (player == enemy) {
+        result = 0
+    } else if (player == 1 && enemy == 3) {
+        result = 1
+    } else if (player == 2 && enemy == 1) {
+        result = 1
+    } else if (player == 3 && enemy == 2) {
+        result = 1
+    } else {
+        result = 2
+    }
+
+    return result
+}
+
+function translate_result(match_result) {
+    /* 
+        DESCRIPTION: Devuelve un texto con el resultado del combate.
+        PARAMETERS:  match_result = número que indica el resultado.
+                     0 = empate, 1 = victoria, 2 = derrota
+    */
+    
+    if (match_result == 1) {
+        return "¡Ganaste! 😎"
+    } else if (match_result == 2) {
+        return "¡Perdiste! 😢"
+    } else {
+        return "¡Empate! 😐"
+    }
+
+}
+
+
+function translate_attack(attack_number) {
+    /* 
+        DESCRIPTION: Devuelve el nombre del ataque según se su número.
+    */
+
+    let selected_attack = ""
+
+    if (attack_number == 1) {
+        selected_attack = "fuego"
+    } else if (attack_number == 2) {
+        selected_attack = "viento"
+    } else {
+        selected_attack = "tierra"
+    }
+    return selected_attack
+}
+
+
+function show_status(match_result) {
     /* 
         DESCRIPTION: Muestra mensajes de estado del juego.
     */
+    
     let warrior = document.getElementById("spn-player").innerHTML
     let sec_messages = document.getElementById("sec-messages")
     let enemy = document.getElementById("spn-enemy").innerHTML
     let message = document.createElement("p")
+    let text_player_attack = translate_attack(player_attack)
+    let text_enemy_attack = translate_attack(enemy_attack)
+    let text_match_result = translate_result(match_result)
 
     message.innerHTML = "Tu " + warrior + " lanza un ataque de " +
-                        selected_attack + ".<br>El " + enemy +
-                        " lanza un ataque de " + enemy_attack + "."
+                        text_player_attack + ".<br>El " + enemy +
+                        " lanza un ataque de " + text_enemy_attack + "." + 
+                        "<br>" + text_match_result
 
     sec_messages.appendChild(message)
 }
 
 
-function select_enemy_attack() {
-    /* 
-        DESCRIPTION: Selecciona el ataque del enemigo de forma aleatoria.
-    */
-
-    // Generar un número entre 1 y 3 que representará el ataque enemigo:
-    // 1 = earth, 2 = wind y 3 = fire
-    let attack_number = aleatorio(1, 3)
-
-    if (attack_number == 1) {
-        enemy_attack = "tierra"
-    } else if (attack_number == 2) {
-        enemy_attack = "aire"
-    } else {
-        enemy_attack = "fuego"
-    }
-
-}
-
-
-function select_attack(event) {
+function attack(event) {
     /* 
         DESCRIPTION: Selecciona el ataque del jugador según el botón 
-        presionado indicado por el parámetro "event.target.id".
+                     presionado indicado por el parámetro 
+                     "event.target.id".
+                     Genera un ataque aleatorio del enemigo y muestra el
+                     resultado.
     */
-    if (event.target.id == "btn-earth") {
-        selected_attack = "tierra"
+
+    let match_result = 0
+    
+    if (event.target.id == "btn-fire") {
+        player_attack = 1 // Fuego
     } else if (event.target.id == "btn-wind") {
-        selected_attack = "aire"
+        player_attack = 2 // Viento
     } else {
-        selected_attack = "fuego"
+        player_attack = 3 // Tierra
     }
 
-    select_enemy_attack()
+    // Generar un número entre 1 y 3 que representará el ataque enemigo:
+    enemy_attack = aleatorio(1, 3)
+
+    match_result = lets_combat(player_attack, enemy_attack)
+
     // Mostrar mensajes de estado.
-    show_status()
+    show_status(match_result)
 }
 
 
@@ -122,16 +180,16 @@ function init() {
     */
     let btn_select = document.getElementById("btn-select")
     btn_select.addEventListener("click", select_warrior)
-    let btn_earth = document.getElementById("btn-earth")
-    btn_earth.addEventListener("click", select_attack)
-    let btn_wind = document.getElementById("btn-wind")
-    btn_wind.addEventListener("click", select_attack)
     let btn_fire = document.getElementById("btn-fire")
-    btn_fire.addEventListener("click", select_attack)
+    btn_fire.addEventListener("click", attack)
+    let btn_wind = document.getElementById("btn-wind")
+    btn_wind.addEventListener("click", attack)
+    let btn_earth = document.getElementById("btn-earth")
+    btn_earth.addEventListener("click", attack)
 }
 
 
-let selected_attack = ""
-let enemy_attack = ""
+let player_attack = 0
+let enemy_attack = 0
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
