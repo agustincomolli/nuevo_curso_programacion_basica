@@ -68,20 +68,24 @@ function lets_combat(player, enemy) {
         PARAMETERS:
                     player = identifica el ataque del jugador.
                     enemy = identifica el ataque del enemigo.
-                    1 = fuego, 2 = viento y 3 = tierra
+                    1 = cuerpo a cuerpo, 2 = rango y 3 = magia
     */
     let result = 0
 
     if (player == enemy) {
         result = 0
-    } else if (player == 1 && enemy == 3) {
+    } else if (player == 1 && enemy == 2) {
         result = 1
-    } else if (player == 2 && enemy == 1) {
+        enemy_health -= 1 // Resto un punto de vida al enemigo.
+    } else if (player == 2 && enemy == 3) {
         result = 1
-    } else if (player == 3 && enemy == 2) {
+        enemy_health -= 1 // Resto un punto de vida al enemigo.
+    } else if (player == 3 && enemy == 1) {
         result = 1
+        enemy_health -= 1 // Resto un punto de vida al enemigo.
     } else {
         result = 2
+        player_health -= 1 // Resto un punto de vida al jugador.
     }
 
     return result
@@ -113,11 +117,11 @@ function translate_attack(attack_number) {
     let selected_attack = ""
 
     if (attack_number == 1) {
-        selected_attack = "fuego"
+        selected_attack = "cuerpo a cuerpo"
     } else if (attack_number == 2) {
-        selected_attack = "viento"
+        selected_attack = "rango"
     } else {
-        selected_attack = "tierra"
+        selected_attack = "magia"
     }
     return selected_attack
 }
@@ -128,15 +132,21 @@ function show_status(match_result) {
         DESCRIPTION: Muestra mensajes de estado del juego.
     */
     
-    let warrior = document.getElementById("spn-player").innerHTML
+    let player = document.getElementById("spn-player").innerHTML
     let sec_messages = document.getElementById("sec-messages")
     let enemy = document.getElementById("spn-enemy").innerHTML
+    let spn_player_health = document.getElementById("spn-player_health")
+    let spn_enemy_health = document.getElementById("spn-enemy_health")
     let message = document.createElement("p")
     let text_player_attack = translate_attack(player_attack)
     let text_enemy_attack = translate_attack(enemy_attack)
     let text_match_result = translate_result(match_result)
 
-    message.innerHTML = "Tu " + warrior + " lanza un ataque de " +
+    // Actualizar puntos de vida.
+    spn_player_health.innerHTML = player_health
+    spn_enemy_health.innerHTML = enemy_health
+    // Actualizar mensaje de estado.
+    message.innerHTML = "Tu " + player + " lanza un ataque de " +
                         text_player_attack + ".<br>El " + enemy +
                         " lanza un ataque de " + text_enemy_attack + "." + 
                         "<br>" + text_match_result
@@ -155,13 +165,26 @@ function attack(event) {
     */
 
     let match_result = 0
+    let spn_player = document.getElementById("spn-player")
+
+    // Verificar que antes de un ataque se haya seleccionado un guerrero.
+    if (spn_player.innerHTML == "guerrero") {
+        alert("Debes seleccionar un guerrero para poder realizar un ataque.")
+        return
+    }
+
+    // Verificar que los jugadores tengan vida para poder atacar.
+    if (!(player_health > 0 && enemy_health > 0)) {
+        alert("¡El juego ha terminado!")
+        return
+    }
     
-    if (event.target.id == "btn-fire") {
-        player_attack = 1 // Fuego
-    } else if (event.target.id == "btn-wind") {
-        player_attack = 2 // Viento
+    if (event.target.id == "btn-mele") {
+        player_attack = 1 // Cuerpo a cuarpo
+    } else if (event.target.id == "btn-range") {
+        player_attack = 2 // Rango
     } else {
-        player_attack = 3 // Tierra
+        player_attack = 3 // Magia
     }
 
     // Generar un número entre 1 y 3 que representará el ataque enemigo:
@@ -180,16 +203,19 @@ function init() {
     */
     let btn_select = document.getElementById("btn-select")
     btn_select.addEventListener("click", select_warrior)
-    let btn_fire = document.getElementById("btn-fire")
-    btn_fire.addEventListener("click", attack)
-    let btn_wind = document.getElementById("btn-wind")
-    btn_wind.addEventListener("click", attack)
-    let btn_earth = document.getElementById("btn-earth")
-    btn_earth.addEventListener("click", attack)
+    let btn_magic = document.getElementById("btn-magic")
+    btn_magic.addEventListener("click", attack)
+    let btn_range = document.getElementById("btn-range")
+    btn_range.addEventListener("click", attack)
+    let btn_mele = document.getElementById("btn-mele")
+    btn_mele.addEventListener("click", attack)
 }
 
 
 let player_attack = 0
 let enemy_attack = 0
+let player_health = 3
+let enemy_health = 3
+
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
