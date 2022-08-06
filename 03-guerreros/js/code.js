@@ -36,6 +36,10 @@ function select_warrior() {
     /* 
         DESCRIPTION: Selecciona el personaje del jugador.
     */
+
+    let sec_warrior = document.getElementById("sec-warrior")
+    let sec_attack = document.getElementById("sec-attack")
+    let sec_messages = document.getElementById("sec-messages")
     let rd_knight = document.getElementById("rd-knight")
     let rd_archer = document.getElementById("rd-archer")
     let rd_mage = document.getElementById("rd-mage")
@@ -55,6 +59,11 @@ function select_warrior() {
     // Mostrar el jugador elegido.
     spn_player.innerHTML = warrior_selected
     alert("Has seleccionado al " + warrior_selected)
+    // Ocultar la sección de selección de jugador
+    sec_warrior.hidden = true
+    // Mostrar las secciones de ataque y mensajes.
+    sec_attack.hidden = false
+    sec_messages.hidden = false
 
     select_enemy()
 }
@@ -127,13 +136,45 @@ function translate_attack(attack_number) {
 }
 
 
+function check_health() {
+    /* 
+        DESCRIPTION: Revisa si la vida de alguno de los contrincantes está
+        en 0 lo que determinará quién ganó el juego.
+    */
+        
+    let sec_messages = document.getElementById("sec-messages")
+    let sec_reset = document.getElementById("sec-reset")
+    let message = document.createElement("h2")
+    let btn_magic = document.getElementById("btn-magic")
+    let btn_range = document.getElementById("btn-range")
+    let btn_mele = document.getElementById("btn-mele")
+
+    if (enemy_health == 0) {
+        message.innerHTML = "¡Ganaste! 🥳🏆"
+    } else if (player_health == 0) {
+       message.innerHTML = "¡Perdiste! 😭🥀"
+    } else {
+        return
+    }
+    
+    sec_messages.appendChild(message)
+
+    // Deshabilitar botones de ataque.
+    btn_magic.disabled = true
+    btn_range.disabled = true
+    btn_mele.disabled = true
+    // Mostrar el botón reiniciar.
+    sec_reset.hidden = false
+}
+
+
 function show_status(match_result) {
     /* 
         DESCRIPTION: Muestra mensajes de estado del juego.
     */
     
-    let player = document.getElementById("spn-player").innerHTML
     let sec_messages = document.getElementById("sec-messages")
+    let player = document.getElementById("spn-player").innerHTML
     let enemy = document.getElementById("spn-enemy").innerHTML
     let spn_player_health = document.getElementById("spn-player_health")
     let spn_enemy_health = document.getElementById("spn-enemy_health")
@@ -152,6 +193,8 @@ function show_status(match_result) {
                         "<br>" + text_match_result
 
     sec_messages.appendChild(message)
+
+    check_health()
 }
 
 
@@ -170,12 +213,6 @@ function attack(event) {
     // Verificar que antes de un ataque se haya seleccionado un guerrero.
     if (spn_player.innerHTML == "guerrero") {
         alert("Debes seleccionar un guerrero para poder realizar un ataque.")
-        return
-    }
-
-    // Verificar que los jugadores tengan vida para poder atacar.
-    if (!(player_health > 0 && enemy_health > 0)) {
-        alert("¡El juego ha terminado!")
         return
     }
     
@@ -197,6 +234,17 @@ function attack(event) {
 }
 
 
+function reset_game() {
+    /* 
+        DESCRIPTION: Reinicia todas las opciones para jugar otra vez.
+    */
+
+    // window.location.reload() recarga la página devolviendo el html 
+    // original.
+    location.reload()
+}
+
+
 function init() {
     /* 
         DESCRIPTION: Inicializa los elementos del html.
@@ -209,6 +257,8 @@ function init() {
     btn_range.addEventListener("click", attack)
     let btn_mele = document.getElementById("btn-mele")
     btn_mele.addEventListener("click", attack)
+    let btn_reset = document.getElementById("btn-reset")
+    btn_reset.addEventListener("click", reset_game)
 }
 
 
