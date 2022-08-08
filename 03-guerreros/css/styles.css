@@ -15,7 +15,6 @@ body {
     color: #DCD7C9;
     font-family: 'Bangers', cursive;
     font-size: large;
-
 }
 
 .title {
@@ -70,11 +69,10 @@ input {
     display: none;
 }
 
-button {
+#btn-select {
     width: 200px;
     height: 60px;
     border-radius: 10px;
-    border-style: solid;
     border-color: #A27B5C;
     font-weight: lighter;
     font-family: 'Bangers', cursive;
@@ -88,5 +86,13 @@ button {
 }
 
 .attack-button {
-    
+    padding: 10px;
+    margin: 5px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border-color: #A27B5C;
+    font-weight: lighter;
+    font-family: 'Bangers', cursive;
+    font-size:larger;
+    color: #3F4E4F;
 }
