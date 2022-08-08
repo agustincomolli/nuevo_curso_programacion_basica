@@ -1,6 +1,63 @@
+/* 
+    Paleta de colores:
+        #2C3639
+        #3F4E4F
+        #A27B5C
+        #DCD7C9
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    background-color: #DCD7C9;
+    color: #2C3639;
+    font-family: 'Press Start 2P', cursive;
+}
+
 .title {
-    color:lightcoral;
-    width: 330px;
+    color: #3F4E4F;
+    text-align: center;
+}
+
+#sec-warrior {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.subtitle {
+
+}
+.cards {
+    display: flex;
+    gap: 10px;
+}
+
+.card {
+    width: 120px;
+    height: 120px;
+    padding: 10px;
+    margin: 10px;
+    box-sizing: border-box;
+    border-color: #A27B5C;
+    border-radius: 10px;
+    border-style: dashed;
+    border-width: 4px;
+}
+
+input {
+    display: none;
+}
+
+button {
+    background-color: #d9c9a5;
+    border-color: #A27B5C;
+    border-style: solid;
+    border-radius: 10px;
+    bottom: 10px;
+    width: 200px;
     height: 50px;
-    background-color: teal;
+    padding: 10px;
+    margin: 10px;
 }

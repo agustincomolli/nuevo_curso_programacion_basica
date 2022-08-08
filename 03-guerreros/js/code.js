@@ -21,11 +21,11 @@ function select_enemy() {
     let spn_enemy = document.getElementById("spn-enemy")
 
     if (enemy_number == 1) {
-        enemy_name = "Cíclope"
+        enemy_name = "Esqueleto soldado"
     } else if (enemy_number == 2) {
-        enemy_name = "Orco"
+        enemy_name = "Esqueleto arquero"
     } else {
-        enemy_name = "Rey Esqueleto"
+        enemy_name = "Esqueleto mago"
     }
 
     spn_enemy.innerHTML = enemy_name
