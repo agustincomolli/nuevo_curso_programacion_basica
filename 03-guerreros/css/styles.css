@@ -7,16 +7,21 @@
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Carter+One&display=swap');
 
 body {
-    background-color: #DCD7C9;
-    color: #2C3639;
-    font-family: 'Press Start 2P', cursive;
+    background-color: #2C3639;
+    color: #DCD7C9;
+    font-family: 'Bangers', cursive;
+    font-size: large;
+
 }
 
 .title {
-    color: #3F4E4F;
+    color: #A27B5C;
     text-align: center;
+    font-weight: lighter;
 }
 
 #sec-warrior {
@@ -27,7 +32,8 @@ body {
 }
 
 .subtitle {
-
+    font-stretch: ultra-expanded;
+    font-weight: lighter;
 }
 .cards {
     display: flex;
@@ -35,29 +41,52 @@ body {
 }
 
 .card {
-    width: 120px;
-    height: 120px;
-    padding: 10px;
+    width: 140px;
+    height: 140px;
+    padding: 5px;
     margin: 10px;
+    background-color: #3F4E4F;
     box-sizing: border-box;
     border-color: #A27B5C;
     border-radius: 10px;
     border-style: dashed;
     border-width: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
+
+.card img {
+    width: 85px;
+    height: 85px;
+}
+.card p {
+    margin-block-start: 2px;
+    margin-block-end: 0;}
 
 input {
     display: none;
 }
 
 button {
-    background-color: #d9c9a5;
-    border-color: #A27B5C;
-    border-style: solid;
-    border-radius: 10px;
-    bottom: 10px;
     width: 200px;
-    height: 50px;
-    padding: 10px;
-    margin: 10px;
+    height: 60px;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: #A27B5C;
+    font-weight: lighter;
+    font-family: 'Bangers', cursive;
+    font-size:x-large;
+    color: #3F4E4F;
+}
+
+#sec-attack {
+    flex-direction: column;
+    align-items: center;
+}
+
+.attack-button {
+    
 }

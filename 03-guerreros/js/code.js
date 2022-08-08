@@ -58,12 +58,12 @@ function select_warrior() {
     }
     // Mostrar el jugador elegido.
     spn_player.innerHTML = warrior_selected
-    alert("Has seleccionado al " + warrior_selected)
+    //alert("Has seleccionado al " + warrior_selected)
     // Ocultar la sección de selección de jugador
-    sec_warrior.hidden = true
+    sec_warrior.style.display = "none"
     // Mostrar las secciones de ataque y mensajes.
-    sec_attack.hidden = false
-    sec_messages.hidden = false
+    sec_attack.style.display = "flex"
+    sec_messages.style.display = "block"
 
     select_enemy()
 }
@@ -164,7 +164,7 @@ function check_health() {
     btn_range.disabled = true
     btn_mele.disabled = true
     // Mostrar el botón reiniciar.
-    sec_reset.hidden = false
+    sec_reset.style.display = "block"
 }
 
 
@@ -259,6 +259,10 @@ function init() {
     btn_mele.addEventListener("click", attack)
     let btn_reset = document.getElementById("btn-reset")
     btn_reset.addEventListener("click", reset_game)
+    let sec_attack = document.getElementById("sec-attack")
+    sec_attack.style.display ="none"
+    let sec_messages = document.getElementById("sec-messages")
+    sec_messages.style.display = "none"
 }
 
 

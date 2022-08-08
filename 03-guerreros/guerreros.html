@@ -17,11 +17,20 @@
         <h2 class="subtitle">Elige a tu guerrero:</h2>
         <div class="cards">
             <input type="radio" name="warrior" id="rd-knight">
-            <label class="card" for="rd-knight">Caballero 🗡️</label>
+            <label class="card" for="rd-knight">
+                <img src="./images/knight.png" alt="Caballero 🗡️">
+                <p>Caballero</p>
+            </label>
             <input type="radio" name="warrior" id="rd-archer">
-            <label class="card" for="rd-archer">Arquero 🏹</label>
+            <label class="card" for="rd-archer">
+                <img src="./images/archer.png" alt="Arquero 🏹">
+                <p>Arquero</p>
+            </label>
             <input type="radio" name="warrior" id="rd-mage">
-            <label class="card" for="rd-mage">Mago 🪄</label>
+            <label class="card" for="rd-mage">
+                <img src="./images/mage.png" alt="Mago 🪄">
+                <p>Mago</p>
+            </label>
         </div>
         <p>
             <button id="btn-select">Seleccionar</button>
@@ -29,24 +38,24 @@
     </section>
 
     <section id="sec-attack" hidden="true">
-        <h2>Elige tu ataque:</h2>
-        <p>Tu <span id="spn-player">guerrero</span> tiene <span id="spn-player_health">3</span> puntos de vida ❤️.</p>
-        <p>El <span id="spn-enemy">enemigo</span> tiene <span id="spn-enemy_health">3</span> puntos de vida 💚.</p>
-        <p>
-            <button id="btn-mele">Cuerpo a cuerpo 💪</button>
-            <button id="btn-range">Rango 💨</button>
-            <button id="btn-magic">Magia 🔥</button>
-        </p>
-    </section>
-
-    <section id="sec-messages" hidden="true">
-        <p></p>
-    </section>
-
-    <section id="sec-reset" hidden="true">
-        <p>
-            <button id="btn-reset">Reiniciar</button>
-        </p>
+        <h2 class="subtitle">Elige tu ataque:</h2>
+        <div>
+            <button id="btn-mele" class="attack-button">Cuerpo a cuerpo 💪</button>
+            <button id="btn-range" class="attack-button">Rango 💨</button>
+            <button id="btn-magic" class="attack-button">Magia 🔥</button>
+        </div>
+        <div>
+            <section id="sec-messages" hidden="true">
+                <p></p>
+            </section>
+                    <section id="sec-reset" hidden="true">
+                <button id="btn-reset">Reiniciar</button>
+            </section>
+        </div>
+        <div>
+            <p>Tu <span id="spn-player">guerrero</span> tiene <span id="spn-player_health">3</span> puntos de vida ❤️.</p>
+            <p>El <span id="spn-enemy">enemigo</span> tiene <span id="spn-enemy_health">3</span> puntos de vida 💚.</p>
+        </div>
     </section>
 </body>
 
