@@ -39,7 +39,7 @@ function select_warrior() {
 
     let sec_warrior = document.getElementById("sec-warrior")
     let sec_attack = document.getElementById("sec-attack")
-    let sec_messages = document.getElementById("sec-messages")
+    let div_messages = document.getElementById("div-messages")
     let rd_knight = document.getElementById("rd-knight")
     let rd_archer = document.getElementById("rd-archer")
     let rd_mage = document.getElementById("rd-mage")
@@ -63,7 +63,6 @@ function select_warrior() {
     sec_warrior.style.display = "none"
     // Mostrar las secciones de ataque y mensajes.
     sec_attack.style.display = "flex"
-    sec_messages.style.display = "block"
 
     select_enemy()
 }
@@ -106,7 +105,7 @@ function translate_result(match_result) {
         PARAMETERS:  match_result = número que indica el resultado.
                      0 = empate, 1 = victoria, 2 = derrota
     */
-    
+
     if (match_result == 1) {
         return "¡Ganaste! 😎"
     } else if (match_result == 2) {
@@ -141,30 +140,31 @@ function check_health() {
         DESCRIPTION: Revisa si la vida de alguno de los contrincantes está
         en 0 lo que determinará quién ganó el juego.
     */
-        
-    let sec_messages = document.getElementById("sec-messages")
-    let sec_reset = document.getElementById("sec-reset")
-    let message = document.createElement("h2")
+
+    let p_result = document.getElementById("p-result")
+    let btn_reset = document.getElementById("btn-reset")
     let btn_magic = document.getElementById("btn-magic")
     let btn_range = document.getElementById("btn-range")
     let btn_mele = document.getElementById("btn-mele")
 
     if (enemy_health == 0) {
-        message.innerHTML = "¡Ganaste! 🥳🏆"
+        p_result.innerHTML = "🥳 ¡Ganaste! 🏆"
     } else if (player_health == 0) {
-       message.innerHTML = "¡Perdiste! 😭🥀"
+        p_result.innerHTML = "😭 ¡Perdiste! 🥀"
     } else {
         return
     }
-    
-    sec_messages.appendChild(message)
+
+    p_result.style.fontSize = "x-large"
+    p_result.style.marginBlock = "4px"
+
 
     // Deshabilitar botones de ataque.
     btn_magic.disabled = true
     btn_range.disabled = true
     btn_mele.disabled = true
     // Mostrar el botón reiniciar.
-    sec_reset.style.display = "block"
+    btn_reset.style.display = "block"
 }
 
 
@@ -172,13 +172,16 @@ function show_status(match_result) {
     /* 
         DESCRIPTION: Muestra mensajes de estado del juego.
     */
-    
-    let sec_messages = document.getElementById("sec-messages")
+
+    let div_player_attack = document.getElementById("div-player-attack")
+    let div_enemy_attack = document.getElementById("div-enemy-attack")
     let player = document.getElementById("spn-player").innerHTML
     let enemy = document.getElementById("spn-enemy").innerHTML
     let spn_player_health = document.getElementById("spn-player_health")
     let spn_enemy_health = document.getElementById("spn-enemy_health")
-    let message = document.createElement("p")
+    let p_result = document.getElementById("p-result")
+    let player_message = document.createElement("p")
+    let enemy_message = document.createElement("p")
     let text_player_attack = translate_attack(player_attack)
     let text_enemy_attack = translate_attack(enemy_attack)
     let text_match_result = translate_result(match_result)
@@ -186,13 +189,15 @@ function show_status(match_result) {
     // Actualizar puntos de vida.
     spn_player_health.innerHTML = player_health
     spn_enemy_health.innerHTML = enemy_health
-    // Actualizar mensaje de estado.
-    message.innerHTML = "Tu " + player + " lanza un ataque de " +
-                        text_player_attack + ".<br>El " + enemy +
-                        " lanza un ataque de " + text_enemy_attack + "." + 
-                        "<br>" + text_match_result
 
-    sec_messages.appendChild(message)
+    // Actualizar mensaje de estado.
+    p_result.innerHTML = text_match_result
+    player_message.innerHTML = "Tu " + player + " lanza un ataque de " +
+        text_player_attack
+    div_player_attack.appendChild(player_message)
+    enemy_message.innerHTML = "El " + enemy + " lanza un ataque de " +
+        text_enemy_attack
+    div_enemy_attack.appendChild(enemy_message)
 
     check_health()
 }
@@ -208,14 +213,12 @@ function attack(event) {
     */
 
     let match_result = 0
-    let spn_player = document.getElementById("spn-player")
+    let div_messages = document.getElementById("div-messages")
 
-    // Verificar que antes de un ataque se haya seleccionado un guerrero.
-    if (spn_player.innerHTML == "guerrero") {
-        alert("Debes seleccionar un guerrero para poder realizar un ataque.")
-        return
+    if (div_messages.style.display == "none") {
+        div_messages.style.display = "flex"
     }
-    
+
     if (event.target.id == "btn-mele") {
         player_attack = 1 // Cuerpo a cuarpo
     } else if (event.target.id == "btn-range") {
@@ -249,20 +252,28 @@ function init() {
     /* 
         DESCRIPTION: Inicializa los elementos del html.
     */
+
     let btn_select = document.getElementById("btn-select")
     btn_select.addEventListener("click", select_warrior)
+    
     let btn_magic = document.getElementById("btn-magic")
     btn_magic.addEventListener("click", attack)
+    
     let btn_range = document.getElementById("btn-range")
     btn_range.addEventListener("click", attack)
+    
     let btn_mele = document.getElementById("btn-mele")
     btn_mele.addEventListener("click", attack)
+    
     let btn_reset = document.getElementById("btn-reset")
     btn_reset.addEventListener("click", reset_game)
+    btn_reset.style.display = "none"
+    
     let sec_attack = document.getElementById("sec-attack")
-    sec_attack.style.display ="none"
-    let sec_messages = document.getElementById("sec-messages")
-    sec_messages.style.display = "none"
+    sec_attack.style.display = "none"
+
+    let div_messages = document.getElementById("div-messages")
+    div_messages.style.display = "none"
 }
 
 
