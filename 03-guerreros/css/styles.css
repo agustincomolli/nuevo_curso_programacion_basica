@@ -99,6 +99,15 @@ input:checked + label {
     color: #3F4E4F;
 }
 
+#p-warning-message {
+    font-size: larger;
+    color:crimson;
+    background-color: #DCD7C9;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    width: 400px;}
+
 #sec-attack {
     flex-direction: column;
     align-items: center;

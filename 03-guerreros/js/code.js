@@ -48,6 +48,7 @@ function select_warrior() {
     let rd_mage = document.getElementById("rd-mage")
     let spn_player = document.getElementById("spn-player")
     let player_image = document.getElementById("player-image")
+    let p_warning_message = document.getElementById("p-warning-message")
     let warrior_selected = ""
 
     if (rd_knight.checked) {
@@ -60,7 +61,7 @@ function select_warrior() {
         warrior_selected = "Mago"
         player_image.src ="./images/mage.png"
     } else {
-        alert("Debes seleccionar un guerrero para luchar")
+        p_warning_message.style.display = "block"
         return // Salir de la función.
     }
     // Mostrar el jugador elegido.
@@ -281,11 +282,14 @@ function init() {
     btn_reset.addEventListener("click", reset_game)
     btn_reset.style.display = "none"
     
-    let sec_attack = document.getElementById("sec-attack")
-    sec_attack.style.display = "none"
+    let sec_attack_selection = document.getElementById("sec-attack-selection")
+    sec_attack_selection.style.display = "none"
 
     let div_messages = document.getElementById("div-messages")
     div_messages.style.display = "none"
+
+    let p_warning_message = document.getElementById("p-warning-message")
+    p_warning_message.style.display = "none"
 }
 
 

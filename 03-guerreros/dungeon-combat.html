@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guerreros</title>
     <link rel="stylesheet" href="css/styles.css">
-<!--     <script src="js/code.js"></script>
- --></head>
+    <script src="js/code.js"></script>
+
+</head>
 
 <body>
 
@@ -18,7 +19,7 @@
             <h1 class="title">¡Dungeon Combat!</h1>
         </header>
 
-        <section id="player-selection">
+        <section id="sec-player-selection">
 
             <h2 class="subtitle">Elige a tu guerrero:</h2>
 
@@ -46,11 +47,13 @@
                 <button id="btn-select">Seleccionar</button>
             </p>
 
-            <p id="warning-message"></p>
+            <p id="p-warning-message">
+                Debes seleccionar un guerrero para luchar
+            </p>
 
         </section>
 
-        <section id="combat">
+        <section id="sec-attack-selection">
 
             <h2 class="subtitle">Elige tu ataque:</h2>
 
@@ -58,6 +61,18 @@
                 <button id="btn-mele" class="attack-button">Cuerpo a cuerpo 💪</button>
                 <button id="btn-range" class="attack-button">Rango 💨</button>
                 <button id="btn-magic" class="attack-button">Magia 🔥</button>
+            </div>
+
+        </section>
+
+        <section id="sec-combat">
+
+            <div id="div-messages">
+                <p id="p-result"></p>
+
+                <section id="sec-reset">
+                    <button id="btn-reset">Reiniciar</button>
+                </section>
             </div>
 
         </section>
