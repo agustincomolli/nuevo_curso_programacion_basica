@@ -35,11 +35,14 @@ body {
     font-stretch: ultra-expanded;
     font-weight: lighter;
 }
+
+/* Todas las imagenes para elegir */
 .cards {
     display: flex;
     gap: 10px;
 }
 
+/* Una imagen de jugador en particular */
 .card {
     width: 140px;
     height: 140px;
@@ -63,8 +66,9 @@ body {
     width: 85px;
     height: 85px;
 }
+
 .card p {
-    margin-block-start: 2px;
+    margin-block: 2px;
     margin-block-end: 0;
 }
 
@@ -125,9 +129,13 @@ input:checked + label {
     margin: 10px;
 }
 
+#p-result {
+    margin-block: 4px;
+}
+
 #btn-reset {
     font-family: 'Bangers', cursive;
-    border: transparent;
+    border-color: #A27B5C;
     padding: 5px;
     margin: 5px;
     box-sizing: border-box;
@@ -135,4 +143,61 @@ input:checked + label {
     font-size: large;
     color: #3F4E4F;
     width: 120px;
+}
+
+.attack {
+    display: grid;
+    width: 90%;
+    grid-template-columns: 140px auto auto 140px;
+    grid-template-rows: auto auto auto;
+}
+
+.player {
+    grid-column: 1;
+    text-align: center;
+}
+
+.player .health {
+    text-align: left;
+}
+
+.enemy {
+    grid-column: 4;
+    text-align: center;
+}
+
+.enemy .health {
+    text-align: right;
+}
+
+.img-characters {
+    width: 120px;
+    height: 120px;
+}
+
+.health {
+    grid-row: 1;
+}
+
+.image {
+    grid-row: 2;
+}
+
+.name {
+    grid-row: 3;
+}
+
+.attacks_player {
+    grid-row: 1;
+    grid-row-end: 3;
+    grid-column: 2;
+    margin-right: 10px;
+    margin-left: 10px}
+
+.attacks_enemy {
+    grid-row: 1;
+    grid-row-end: 3;
+    grid-column: 3;
+    margin-right: 10px;
+    margin-left: 10px
 }

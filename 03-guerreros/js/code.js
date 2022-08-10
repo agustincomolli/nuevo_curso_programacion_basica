@@ -19,13 +19,17 @@ function select_enemy() {
     let enemy_number = aleatorio(1, 3)
     let enemy_name = ""
     let spn_enemy = document.getElementById("spn-enemy")
+    let enemy_image = document.getElementById("enemy-image")
 
     if (enemy_number == 1) {
         enemy_name = "Esqueleto soldado"
+        enemy_image.src = "./images/skeleton_soldier.png"
     } else if (enemy_number == 2) {
         enemy_name = "Esqueleto arquero"
+        enemy_image.src = "./images/skeleton_archer.png"
     } else {
         enemy_name = "Esqueleto mago"
+        enemy_image.src = "./images/skeleton_mage.png"
     }
 
     spn_enemy.innerHTML = enemy_name
@@ -39,19 +43,22 @@ function select_warrior() {
 
     let sec_warrior = document.getElementById("sec-warrior")
     let sec_attack = document.getElementById("sec-attack")
-    let div_messages = document.getElementById("div-messages")
     let rd_knight = document.getElementById("rd-knight")
     let rd_archer = document.getElementById("rd-archer")
     let rd_mage = document.getElementById("rd-mage")
     let spn_player = document.getElementById("spn-player")
+    let player_image = document.getElementById("player-image")
     let warrior_selected = ""
 
     if (rd_knight.checked) {
         warrior_selected = "Caballero"
+        player_image.src ="./images/knight.png"
     } else if (rd_archer.checked) {
         warrior_selected = "Arquero"
+        player_image.src ="./images/archer.png"
     } else if (rd_mage.checked) {
         warrior_selected = "Mago"
+        player_image.src ="./images/mage.png"
     } else {
         alert("Debes seleccionar un guerrero para luchar")
         return // Salir de la función.
@@ -146,15 +153,20 @@ function check_health() {
     let btn_magic = document.getElementById("btn-magic")
     let btn_range = document.getElementById("btn-range")
     let btn_mele = document.getElementById("btn-mele")
+    let spn_enemy_health = document.getElementById("spn-enemy_health")
+    let spn_player_health = document.getElementById("spn-player_health")
 
     if (enemy_health == 0) {
         p_result.innerHTML = "🥳 ¡Ganaste! 🏆"
+        spn_enemy_health.innerHTML = "☠️"
     } else if (player_health == 0) {
         p_result.innerHTML = "😭 ¡Perdiste! 🥀"
+        spn_player_health.innerHTML = "☠️"
     } else {
         return
     }
 
+    // Cambiar el tamaño de la letra para indicar el mensaje final.
     p_result.style.fontSize = "x-large"
     p_result.style.marginBlock = "4px"
 
@@ -187,8 +199,8 @@ function show_status(match_result) {
     let text_match_result = translate_result(match_result)
 
     // Actualizar puntos de vida.
-    spn_player_health.innerHTML = player_health
-    spn_enemy_health.innerHTML = enemy_health
+    spn_player_health.innerHTML = "❤️".repeat(player_health)
+    spn_enemy_health.innerHTML = "💚".repeat(enemy_health)
 
     // Actualizar mensaje de estado.
     p_result.innerHTML = text_match_result
