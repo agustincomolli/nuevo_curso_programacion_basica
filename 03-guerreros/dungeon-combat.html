@@ -15,11 +15,11 @@
 
     <div class="grid-layout">
 
-        <header id="header">
+        <header id="header" class="header">
             <h1 class="title">¡Dungeon Combat!</h1>
         </header>
 
-        <section id="sec-player-selection">
+        <section id="sec-player-selection" class="player-selection">
 
             <h2 class="subtitle">Elige a tu guerrero:</h2>
 
@@ -53,7 +53,7 @@
 
         </section>
 
-        <section id="sec-attack-selection">
+        <section id="sec-attack-selection" class="attack-selection">
 
             <h2 class="subtitle">Elige tu ataque:</h2>
 
@@ -65,14 +65,51 @@
 
         </section>
 
-        <section id="sec-combat">
+        <section id="sec-combat" class="combat">
 
-            <div id="div-messages">
-                <p id="p-result"></p>
+            <div id="player" class="player">
+                <div class="health">
+                    <span id="spn-player_health">❤️❤️❤️</span>
+                </div>
+
+                <div class="image">
+                    <img src="./images/knight.png" alt="Tu guerrero" id="player-image" class="img-characters">
+                </div>
+
+                <div class="name">
+                    <span id="spn-player">guerrero</span>
+                </div>
+            </div>
+
+            <div id="div-messages" class="messages">
+                <p id="p-result">Resultado</p>
 
                 <section id="sec-reset">
                     <button id="btn-reset">Reiniciar</button>
                 </section>
+            </div>
+
+            <div id="enemy" class="enemy">
+                <div class="health">
+                    <span id="spn-enemy_health">💚💚💚</span>
+                </div>
+
+                <div class="image">
+                    <img src="./images/skeleton_soldier.png" alt="Tu enemigo" id="enemy-image" class="img-characters">
+                </div>
+
+                <div class="name">
+                    <span id="spn-enemy">enemigo</span>
+                </div>
+            </div>
+
+            <div id="div-attack-messages" class="attack-messages">
+                <div class="attack-messages-content">
+
+                    <div id="div-player-attack" class="player-attack"></div>
+                    <div id="div-enemy-attack" class="enemy-attack"></div>
+
+                </div>
             </div>
 
         </section>

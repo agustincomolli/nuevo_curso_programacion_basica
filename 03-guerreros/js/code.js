@@ -41,8 +41,9 @@ function select_warrior() {
         DESCRIPTION: Selecciona el personaje del jugador.
     */
 
-    let sec_warrior = document.getElementById("sec-warrior")
-    let sec_attack = document.getElementById("sec-attack")
+    let sec_player_selection = document.getElementById("sec-player-selection")
+    let sec_attack_selection = document.getElementById("sec-attack-selection")
+    let sec_combat = document.getElementById("sec-combat")
     let rd_knight = document.getElementById("rd-knight")
     let rd_archer = document.getElementById("rd-archer")
     let rd_mage = document.getElementById("rd-mage")
@@ -53,13 +54,13 @@ function select_warrior() {
 
     if (rd_knight.checked) {
         warrior_selected = "Caballero"
-        player_image.src ="./images/knight.png"
+        player_image.src = "./images/knight.png"
     } else if (rd_archer.checked) {
         warrior_selected = "Arquero"
-        player_image.src ="./images/archer.png"
+        player_image.src = "./images/archer.png"
     } else if (rd_mage.checked) {
         warrior_selected = "Mago"
-        player_image.src ="./images/mage.png"
+        player_image.src = "./images/mage.png"
     } else {
         p_warning_message.style.display = "block"
         return // Salir de la función.
@@ -68,9 +69,10 @@ function select_warrior() {
     spn_player.innerHTML = warrior_selected
     //alert("Has seleccionado al " + warrior_selected)
     // Ocultar la sección de selección de jugador
-    sec_warrior.style.display = "none"
+    sec_player_selection.style.display = "none"
     // Mostrar las secciones de ataque y mensajes.
-    sec_attack.style.display = "flex"
+    sec_attack_selection.style.display = "flex"
+    sec_combat.style.display = "grid"
 
     select_enemy()
 }
@@ -268,25 +270,33 @@ function init() {
 
     let btn_select = document.getElementById("btn-select")
     btn_select.addEventListener("click", select_warrior)
-    
+
     let btn_magic = document.getElementById("btn-magic")
     btn_magic.addEventListener("click", attack)
-    
+
     let btn_range = document.getElementById("btn-range")
     btn_range.addEventListener("click", attack)
-    
+
     let btn_mele = document.getElementById("btn-mele")
     btn_mele.addEventListener("click", attack)
-    
+
     let btn_reset = document.getElementById("btn-reset")
     btn_reset.addEventListener("click", reset_game)
     btn_reset.style.display = "none"
-    
-    let sec_attack_selection = document.getElementById("sec-attack-selection")
-    sec_attack_selection.style.display = "none"
+
+    let sec_attack_selection_selection = document.getElementById
+        ("sec-attack-selection")
+    sec_attack_selection_selection.style.display = "none"
+
+    let sec_combat = document.getElementById("sec-combat")
+    sec_combat.style.display = "none"
 
     let div_messages = document.getElementById("div-messages")
     div_messages.style.display = "none"
+
+    let div_attack_messages = document.getElementById
+    ("attack-messages")
+    div_attack_messages.style.display = "none"
 
     let p_warning_message = document.getElementById("p-warning-message")
     p_warning_message.style.display = "none"

@@ -18,13 +18,101 @@ body {
     font-size: large;
 }
 
+.grid-layout {
+    display: grid;
+    grid-template-areas: "header"
+                         "player-selection"
+                         "attack-selection"
+                         "combat";
+    padding: 0px 20px; /* arriba y abajo 0px; izquierda y derecha 20px */
+}
+
+.header {
+    grid-area: header;
+}
+
+.player-selection {
+    grid-area: player-selection;
+}
+
+.attack-selection {
+    grid-area: attack-selection;
+}
+
+.combat {
+    grid-area: combat;
+    display: grid;
+    grid-template-areas: "player messages messages enemy"
+                         "player attack-messages attack-messages enemy";
+    grid-template-columns: 200px auto auto 200px;
+}
+
+.player {
+    grid-area: player;
+    justify-self: start;
+    margin-left: 20px;
+    text-align: center;
+    width: 150px;
+}
+
+.enemy {
+    grid-area: enemy;
+    justify-self: end;
+    margin-right: 20px;
+    text-align: center;
+    width: 150px;
+}
+
+.messages {
+    grid-area: messages;
+    justify-self: center;
+}
+
+.attack-messages {
+    grid-area: attack-messages;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: #DCD7C9;
+}
+
+.attack-messages-content {
+    display: grid;
+    grid-template-areas: "player-attack enemy-attack";
+    grid-area: attack-messages;
+    height:15em;
+    line-height: 1em;
+    overflow-y: auto;
+
+}
+
+.player-attack {
+    grid-area: player-attack;
+    margin: 0px 0px 5px 5px;
+    padding-left: 20px;
+    background-color: #DCD7C9;
+    color: #3F4E4F;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.enemy-attack {
+    grid-area: enemy-attack;
+    margin: 0px 5px 5px 0px;
+    padding-right: 20px;
+    background-color: #DCD7C9;
+    color: #3F4E4F;
+    text-align: right;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
 .title {
     color: #A27B5C;
     text-align: center;
     font-weight: lighter;
 }
 
-#sec-warrior {
+#sec-player-selection {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -108,7 +196,8 @@ input:checked + label {
     text-align: center;
     width: 400px;}
 
-#sec-attack {
+#sec-attack-selection {
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -128,9 +217,9 @@ input:checked + label {
 #div-messages {
     display: flex;
     flex-direction: column;
-    align-items: center;   
+    align-items: center;
+    align-self: start;   
     border-radius: 10px;
-    display: block;
     width: 300px;
     background-color: #DCD7C9;
     color: #2C3639;
@@ -154,59 +243,7 @@ input:checked + label {
     width: 120px;
 }
 
-.attack {
-    display: grid;
-    width: 90%;
-    grid-template-columns: 140px auto auto 140px;
-    grid-template-rows: auto auto auto;
-}
-
-.player {
-    grid-column: 1;
-    text-align: center;
-}
-
-.player .health {
-    text-align: left;
-}
-
-.enemy {
-    grid-column: 4;
-    text-align: center;
-}
-
-.enemy .health {
-    text-align: right;
-}
-
 .img-characters {
     width: 120px;
     height: 120px;
-}
-
-.health {
-    grid-row: 1;
-}
-
-.image {
-    grid-row: 2;
-}
-
-.name {
-    grid-row: 3;
-}
-
-.attacks_player {
-    grid-row: 1;
-    grid-row-end: 3;
-    grid-column: 2;
-    margin-right: 10px;
-    margin-left: 10px}
-
-.attacks_enemy {
-    grid-row: 1;
-    grid-row-end: 3;
-    grid-column: 3;
-    margin-right: 10px;
-    margin-left: 10px
 }
