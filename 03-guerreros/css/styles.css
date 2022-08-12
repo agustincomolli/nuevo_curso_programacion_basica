@@ -95,7 +95,7 @@ body {
 .attack-messages-content {
     display: grid;
     grid-template-areas: "player-attack enemy-attack";
-    height:15em;
+    max-height: 15em;
     line-height: 1em;
     overflow-y: auto;
 
