@@ -86,7 +86,7 @@ function lets_combat(player, enemy) {
         PARAMETERS:
                     player = identifica el ataque del jugador.
                     enemy = identifica el ataque del enemigo.
-                    1 = cuerpo a cuerpo, 2 = rango y 3 = magia
+                    1 = tierra, 2 = agua y 3 = fuego
     */
     let result = 0
 
@@ -135,11 +135,11 @@ function translate_attack(attack_number) {
     let selected_attack = ""
 
     if (attack_number == 1) {
-        selected_attack = "cuerpo a cuerpo"
+        selected_attack = "tierra"
     } else if (attack_number == 2) {
-        selected_attack = "rango"
+        selected_attack = "agua"
     } else {
-        selected_attack = "magia"
+        selected_attack = "fuego"
     }
     return selected_attack
 }
@@ -153,9 +153,9 @@ function check_health() {
 
     let p_result = document.getElementById("p-result")
     let btn_reset = document.getElementById("btn-reset")
-    let btn_magic = document.getElementById("btn-magic")
-    let btn_range = document.getElementById("btn-range")
-    let btn_mele = document.getElementById("btn-mele")
+    let btn_fire = document.getElementById("btn-fire")
+    let btn_water = document.getElementById("btn-water")
+    let btn_earth = document.getElementById("btn-earth")
     let spn_enemy_health = document.getElementById("spn-enemy_health")
     let spn_player_health = document.getElementById("spn-player_health")
 
@@ -175,9 +175,9 @@ function check_health() {
 
 
     // Deshabilitar botones de ataque.
-    btn_magic.disabled = true
-    btn_range.disabled = true
-    btn_mele.disabled = true
+    btn_fire.disabled = true
+    btn_water.disabled = true
+    btn_earth.disabled = true
     // Mostrar el botón reiniciar.
     btn_reset.style.display = "block"
 }
@@ -229,14 +229,17 @@ function attack(event) {
 
     let match_result = 0
     let div_messages = document.getElementById("div-messages")
+    let div_attack_messages = document.getElementById
+        ("div-attack-messages")
 
     if (div_messages.style.display == "none") {
         div_messages.style.display = "flex"
+        div_attack_messages.style.display = "grid"
     }
 
-    if (event.target.id == "btn-mele") {
+    if (event.target.id == "btn-earth") {
         player_attack = 1 // Cuerpo a cuarpo
-    } else if (event.target.id == "btn-range") {
+    } else if (event.target.id == "btn-water") {
         player_attack = 2 // Rango
     } else {
         player_attack = 3 // Magia
@@ -268,22 +271,24 @@ function init() {
         DESCRIPTION: Inicializa los elementos del html.
     */
 
+    // Inicializar los botones del juego.
     let btn_select = document.getElementById("btn-select")
     btn_select.addEventListener("click", select_warrior)
 
-    let btn_magic = document.getElementById("btn-magic")
-    btn_magic.addEventListener("click", attack)
+    let btn_fire = document.getElementById("btn-fire")
+    btn_fire.addEventListener("click", attack)
 
-    let btn_range = document.getElementById("btn-range")
-    btn_range.addEventListener("click", attack)
+    let btn_water = document.getElementById("btn-water")
+    btn_water.addEventListener("click", attack)
 
-    let btn_mele = document.getElementById("btn-mele")
-    btn_mele.addEventListener("click", attack)
+    let btn_earth = document.getElementById("btn-earth")
+    btn_earth.addEventListener("click", attack)
 
     let btn_reset = document.getElementById("btn-reset")
     btn_reset.addEventListener("click", reset_game)
     btn_reset.style.display = "none"
 
+    // Inicializar las secciones del juego.
     let sec_attack_selection_selection = document.getElementById
         ("sec-attack-selection")
     sec_attack_selection_selection.style.display = "none"
@@ -295,7 +300,7 @@ function init() {
     div_messages.style.display = "none"
 
     let div_attack_messages = document.getElementById
-    ("attack-messages")
+        ("div-attack-messages")
     div_attack_messages.style.display = "none"
 
     let p_warning_message = document.getElementById("p-warning-message")

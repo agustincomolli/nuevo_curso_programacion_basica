@@ -8,6 +8,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
+html body {
+height: 97vh;
+}
+
 body {
     background-image: url("../images/tomb_background.jpg");
     background-size: cover;
@@ -23,7 +27,10 @@ body {
     grid-template-areas: "header"
                          "player-selection"
                          "attack-selection"
-                         "combat";
+                         "combat"
+                         "footer";
+    grid-template-rows: 80px auto auto auto 1fr;
+    height: 97vh;
     padding: 0px 20px; /* arriba y abajo 0px; izquierda y derecha 20px */
 }
 
@@ -45,6 +52,15 @@ body {
     grid-template-areas: "player messages messages enemy"
                          "player attack-messages attack-messages enemy";
     grid-template-columns: 200px auto auto 200px;
+    grid-template-rows: 110px auto;
+}
+
+.footer {
+    grid-area: footer;
+    font-size: small;
+    align-self: end;
+    justify-self: end;
+    padding: 5px;
 }
 
 .player {
@@ -78,7 +94,6 @@ body {
 .attack-messages-content {
     display: grid;
     grid-template-areas: "player-attack enemy-attack";
-    grid-area: attack-messages;
     height:15em;
     line-height: 1em;
     overflow-y: auto;
@@ -91,6 +106,7 @@ body {
     padding-left: 20px;
     background-color: #DCD7C9;
     color: #3F4E4F;
+    text-align: left;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -110,6 +126,7 @@ body {
     color: #A27B5C;
     text-align: center;
     font-weight: lighter;
+    margin-block-end: 0.5em;
 }
 
 #sec-player-selection {
@@ -218,7 +235,7 @@ input:checked + label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    align-self: start;   
+    align-self: center;   
     border-radius: 10px;
     width: 300px;
     background-color: #DCD7C9;
