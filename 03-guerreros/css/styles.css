@@ -61,6 +61,7 @@ body {
     align-self: end;
     justify-self: end;
     padding: 5px;
+    letter-spacing: 0.1em;
 }
 
 .player {
@@ -125,6 +126,7 @@ body {
 .title {
     color: #A27B5C;
     text-align: center;
+    text-shadow: 2px 2px 8px #3F4E4F;
     font-weight: lighter;
     margin-block-end: 0.5em;
 }
@@ -142,7 +144,7 @@ body {
 }
 
 /* Todas las imagenes para elegir */
-.cards {
+.cards, .attack-buttons {
     display: flex;
     gap: 10px;
 }
@@ -220,6 +222,7 @@ input:checked + label {
 }
 
 .attack-button {
+    width: 140px;
     padding: 10px;
     margin: 5px;
     box-sizing: border-box;
@@ -263,4 +266,10 @@ input:checked + label {
 .img-characters {
     width: 120px;
     height: 120px;
+}
+
+@media (max-width: 360px) {
+    .cards, .attack-buttons {
+        flex-direction: column;
+    }
 }
