@@ -135,11 +135,11 @@ function translate_attack(attack_number) {
     let selected_attack = ""
 
     if (attack_number == 1) {
-        selected_attack = "tierra"
+        selected_attack = "tierra 🍃"
     } else if (attack_number == 2) {
-        selected_attack = "agua"
+        selected_attack = "agua 💧"
     } else {
-        selected_attack = "fuego"
+        selected_attack = "fuego 🔥"
     }
     return selected_attack
 }
@@ -207,11 +207,9 @@ function show_status(match_result) {
 
     // Actualizar mensaje de estado.
     p_result.innerHTML = text_match_result
-    player_message.innerHTML = "Tu " + player + " lanza un ataque de " +
-        text_player_attack
+    player_message.innerHTML = "Ataque de " + text_player_attack
     div_player_attack.appendChild(player_message)
-    enemy_message.innerHTML = "El " + enemy + " lanza un ataque de " +
-        text_enemy_attack
+    enemy_message.innerHTML = "Ataque de " + text_enemy_attack
     div_enemy_attack.appendChild(enemy_message)
 
     check_health()

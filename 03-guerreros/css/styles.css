@@ -87,6 +87,8 @@ body {
 
 .attack-messages {
     grid-area: attack-messages;
+    grid-auto-columns: minmax(340px, 400px); /* Ancho mínimo y máximo */
+    justify-self: center; /* Centrar en la pantalla */
     border-radius: 10px;
     padding: 5px;
     background-color: #DCD7C9;
@@ -95,6 +97,7 @@ body {
 .attack-messages-content {
     display: grid;
     grid-template-areas: "player-attack enemy-attack";
+    column-gap: 10px; /* Separación entre columnas */
     max-height: 15em;
     line-height: 1em;
     overflow-y: auto;
