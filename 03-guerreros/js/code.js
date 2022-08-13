@@ -18,8 +18,6 @@ function select_enemy() {
     // 1 = ciclop, 2 = orc y 3 = skeleton
     let enemy_number = aleatorio(1, 3)
     let enemy_name = ""
-    let spn_enemy = document.getElementById("spn-enemy")
-    let enemy_image = document.getElementById("enemy-image")
 
     if (enemy_number == 1) {
         enemy_name = "Esqueleto soldado"
@@ -41,15 +39,6 @@ function select_warrior() {
         DESCRIPTION: Selecciona el personaje del jugador.
     */
 
-    let sec_player_selection = document.getElementById("sec-player-selection")
-    let sec_attack_selection = document.getElementById("sec-attack-selection")
-    let sec_combat = document.getElementById("sec-combat")
-    let rd_knight = document.getElementById("rd-knight")
-    let rd_archer = document.getElementById("rd-archer")
-    let rd_mage = document.getElementById("rd-mage")
-    let spn_player = document.getElementById("spn-player")
-    let player_image = document.getElementById("player-image")
-    let p_warning_message = document.getElementById("p-warning-message")
     let warrior_selected = ""
 
     if (rd_knight.checked) {
@@ -151,14 +140,6 @@ function check_health() {
         en 0 lo que determinará quién ganó el juego.
     */
 
-    let p_result = document.getElementById("p-result")
-    let btn_reset = document.getElementById("btn-reset")
-    let btn_fire = document.getElementById("btn-fire")
-    let btn_water = document.getElementById("btn-water")
-    let btn_earth = document.getElementById("btn-earth")
-    let spn_enemy_health = document.getElementById("spn-enemy_health")
-    let spn_player_health = document.getElementById("spn-player_health")
-
     if (enemy_health == 0) {
         p_result.innerHTML = "🥳 ¡Ganaste! 🏆"
         spn_enemy_health.innerHTML = "☠️"
@@ -188,13 +169,6 @@ function show_status(match_result) {
         DESCRIPTION: Muestra mensajes de estado del juego.
     */
 
-    let div_player_attack = document.getElementById("div-player-attack")
-    let div_enemy_attack = document.getElementById("div-enemy-attack")
-    let player = document.getElementById("spn-player").innerHTML
-    let enemy = document.getElementById("spn-enemy").innerHTML
-    let spn_player_health = document.getElementById("spn-player_health")
-    let spn_enemy_health = document.getElementById("spn-enemy_health")
-    let p_result = document.getElementById("p-result")
     let player_message = document.createElement("p")
     let enemy_message = document.createElement("p")
     let text_player_attack = translate_attack(player_attack)
@@ -226,9 +200,6 @@ function attack(event) {
     */
 
     let match_result = 0
-    let div_messages = document.getElementById("div-messages")
-    let div_attack_messages = document.getElementById
-        ("div-attack-messages")
 
     if (div_messages.style.display == "none") {
         div_messages.style.display = "flex"
@@ -270,42 +241,56 @@ function init() {
     */
 
     // Inicializar los botones del juego.
-    let btn_select = document.getElementById("btn-select")
     btn_select.addEventListener("click", select_warrior)
-
-    let btn_fire = document.getElementById("btn-fire")
     btn_fire.addEventListener("click", attack)
-
-    let btn_water = document.getElementById("btn-water")
     btn_water.addEventListener("click", attack)
-
-    let btn_earth = document.getElementById("btn-earth")
     btn_earth.addEventListener("click", attack)
-
-    let btn_reset = document.getElementById("btn-reset")
     btn_reset.addEventListener("click", reset_game)
     btn_reset.style.display = "none"
 
     // Inicializar las secciones del juego.
-    let sec_attack_selection_selection = document.getElementById
-        ("sec-attack-selection")
     sec_attack_selection_selection.style.display = "none"
-
-    let sec_combat = document.getElementById("sec-combat")
     sec_combat.style.display = "none"
-
-    let div_messages = document.getElementById("div-messages")
     div_messages.style.display = "none"
-
-    let div_attack_messages = document.getElementById
-        ("div-attack-messages")
     div_attack_messages.style.display = "none"
-
-    let p_warning_message = document.getElementById("p-warning-message")
     p_warning_message.style.display = "none"
 }
 
 
+// Declarar todos los elementos HTML que voy a usar como constantes.
+const btn_select = document.getElementById("btn-select")
+const btn_fire = document.getElementById("btn-fire")
+const btn_water = document.getElementById("btn-water")
+const btn_earth = document.getElementById("btn-earth")
+const btn_reset = document.getElementById("btn-reset")
+const sec_attack_selection_selection = document.getElementById
+    ("sec-attack-selection")
+const sec_combat = document.getElementById("sec-combat")
+const div_messages = document.getElementById("div-messages")
+const div_attack_messages = document.getElementById
+    ("div-attack-messages")
+const p_warning_message = document.getElementById("p-warning-message")
+
+const div_player_attack = document.getElementById("div-player-attack")
+const div_enemy_attack = document.getElementById("div-enemy-attack")
+const player = document.getElementById("spn-player").innerHTML
+const enemy = document.getElementById("spn-enemy").innerHTML
+const spn_player_health = document.getElementById("spn-player_health")
+const spn_enemy_health = document.getElementById("spn-enemy_health")
+const p_result = document.getElementById("p-result")
+
+const sec_player_selection = document.getElementById("sec-player-selection")
+const sec_attack_selection = document.getElementById("sec-attack-selection")
+const rd_knight = document.getElementById("rd-knight")
+const rd_archer = document.getElementById("rd-archer")
+const rd_mage = document.getElementById("rd-mage")
+const spn_player = document.getElementById("spn-player")
+const player_image = document.getElementById("player-image")
+
+const spn_enemy = document.getElementById("spn-enemy")
+const enemy_image = document.getElementById("enemy-image")
+
+// Declarar variables de uso general.
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
