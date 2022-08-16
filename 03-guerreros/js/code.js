@@ -1,3 +1,17 @@
+class Character {
+    /* DESCRIPTION: Modela los personajes del juego, tanto del jugador
+                    como los personajes enemigos.
+    */
+
+    constructor(name, image, health) {
+        this.name = name
+        this.image = image
+        this.health = health
+        this.attacks_skills = []
+    }
+}
+
+
 function aleatorio(min, max) {
     /* 
         DESCRIPTION: Genera un número aleatorio entre el min y el max.
@@ -291,10 +305,39 @@ const spn_enemy = document.getElementById("spn-enemy")
 const enemy_image = document.getElementById("enemy-image")
 
 // Declarar variables de uso general.
+let user_characters = []
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
 let enemy_health = 3
 
+// Declarar objetos que contendrán los personajes a elegir.
+let knight = new Character("Caballero", "./images/knight.png", 3)
+let archer = new Character("Arquero", "./images/archer.png", 3)
+let mage = new Character("Mago", "./images/mage.png", 3)
+
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
+
+// Agregar habilidades de ataque a cada personaje.
+knight.attacks_skills.push(
+    { name: "Tierra 🍃", id: "btn-earth"},
+    { name: "Tierra 🍃", id: "btn-earth"},
+    { name: "Tierra 🍃", id: "btn-earth"},
+    { name: "Agua 💧", id: "btn-water"},
+    { name: "Fuego 🔥", id: "btn-fire"}
+)
+archer.attacks_skills.push(
+    { name: "Agua 💧", id: "btn-water"},
+    { name: "Agua 💧", id: "btn-water"},
+    { name: "Agua 💧", id: "btn-water"},
+    { name: "Tierra 🍃", id: "btn-earth"},
+    { name: "Fuego 🔥", id: "btn-fire"}
+)
+mage.attacks_skills.push(
+    { name: "Fuego 🔥", id: "btn-fire"},
+    { name: "Fuego 🔥", id: "btn-fire"},
+    { name: "Fuego 🔥", id: "btn-fire"},
+    { name: "Tierra 🍃", id: "btn-earth"},
+    { name: "Agua 💧", id: "btn-water"}
+)
