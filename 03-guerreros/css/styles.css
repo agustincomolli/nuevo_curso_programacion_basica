@@ -87,7 +87,7 @@ body {
 
 .attack-messages {
     grid-area: attack-messages;
-    grid-auto-columns: minmax(340px, 400px); /* Ancho mínimo y máximo */
+    grid-auto-columns: minmax(330px, 400px); /* Ancho mínimo y máximo */
     justify-self: center; /* Centrar en la pantalla */
     border-radius: 10px;
     padding: 5px;
@@ -272,7 +272,45 @@ input:checked + label {
 }
 
 @media (max-width: 360px) {
+    .grid-layout {
+        padding: 0px 2px;
+    }
+    .title, .subtitle, #p-warning-message {
+        margin-block-start: 0.4em;
+        margin-block-end: 0.4em;
+    }
     .cards, .attack-buttons {
         flex-direction: column;
+        gap: 4px;
+    }
+    .card {
+        margin: 2px;
+    }
+    #btn-select {
+        margin-top: 8px;
+    }
+    #p-warning-message {
+        width: 320px;
+    }
+    .combat {
+        grid-area: combat;
+        display: grid;
+        grid-template-areas: "messages messages"
+                             "player enemy"
+                             "attack-messages attack-messages";
+        grid-template-columns: auto auto;
+        grid-template-rows: 110px auto auto;
+    }
+    .messages {
+        margin: 5px;
+    }
+    .img-characters {
+        display: none;
+    }
+    .attack-messages-content {
+        max-height: 10em;
+    }
+    .player, .enemy {
+        margin: 0px 0px 8px 0px;
     }
 }
