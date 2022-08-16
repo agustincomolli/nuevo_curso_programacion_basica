@@ -3,7 +3,8 @@ class Character {
                     como los personajes enemigos.
     */
 
-    constructor(name, image, health) {
+    constructor(id, name, image, health) {
+        this.id = id
         this.name = name
         this.image = image
         this.health = health
@@ -260,14 +261,25 @@ function init() {
     btn_water.addEventListener("click", attack)
     btn_earth.addEventListener("click", attack)
     btn_reset.addEventListener("click", reset_game)
-    btn_reset.style.display = "none"
 
     // Inicializar las secciones del juego.
+    p_warning_message.style.display = "none"
     sec_attack_selection_selection.style.display = "none"
     sec_combat.style.display = "none"
     div_messages.style.display = "none"
+    btn_reset.style.display = "none"
     div_attack_messages.style.display = "none"
-    p_warning_message.style.display = "none"
+
+    // Por cada personaje crear una tarjeta con sus valores.
+    user_characters.forEach((character) => {
+        player_card = `
+        <input type="radio" name="warrior" id="rd-${character.id}">
+        <label class="card" for="rd-${character.id}">
+            <img src=${character.image}" alt="${character.name}">
+            <p>${character.name}</p>
+        </label>
+        `
+    })
 }
 
 
@@ -306,38 +318,43 @@ const enemy_image = document.getElementById("enemy-image")
 
 // Declarar variables de uso general.
 let user_characters = []
+let player_card = ""
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
 let enemy_health = 3
 
 // Declarar objetos que contendrán los personajes a elegir.
-let knight = new Character("Caballero", "./images/knight.png", 3)
-let archer = new Character("Arquero", "./images/archer.png", 3)
-let mage = new Character("Mago", "./images/mage.png", 3)
+let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
+let archer = new Character("archer", "Arquero", "./images/archer.png", 3)
+let mage = new Character("mage", "Mago", "./images/mage.png", 3)
 
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
 
 // Agregar habilidades de ataque a cada personaje.
 knight.attacks_skills.push(
-    { name: "Tierra 🍃", id: "btn-earth"},
-    { name: "Tierra 🍃", id: "btn-earth"},
-    { name: "Tierra 🍃", id: "btn-earth"},
-    { name: "Agua 💧", id: "btn-water"},
-    { name: "Fuego 🔥", id: "btn-fire"}
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Fuego 🔥", id: "btn-fire" }
 )
+
 archer.attacks_skills.push(
-    { name: "Agua 💧", id: "btn-water"},
-    { name: "Agua 💧", id: "btn-water"},
-    { name: "Agua 💧", id: "btn-water"},
-    { name: "Tierra 🍃", id: "btn-earth"},
-    { name: "Fuego 🔥", id: "btn-fire"}
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Fuego 🔥", id: "btn-fire" }
 )
+
 mage.attacks_skills.push(
-    { name: "Fuego 🔥", id: "btn-fire"},
-    { name: "Fuego 🔥", id: "btn-fire"},
-    { name: "Fuego 🔥", id: "btn-fire"},
-    { name: "Tierra 🍃", id: "btn-earth"},
-    { name: "Agua 💧", id: "btn-water"}
+    { name: "Fuego 🔥", id: "btn-fire" },
+    { name: "Fuego 🔥", id: "btn-fire" },
+    { name: "Fuego 🔥", id: "btn-fire" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Agua 💧", id: "btn-water" }
 )
+
+user_characters.push(knight, archer, mage)
