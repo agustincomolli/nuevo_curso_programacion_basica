@@ -272,6 +272,7 @@ function init() {
 
     // Por cada personaje crear una tarjeta con sus valores.
     user_characters.forEach((character) => {
+        // Crear un template literario usando las comillas invertidas ``.
         player_card = `
         <input type="radio" name="warrior" id="rd-${character.id}">
         <label class="card" for="rd-${character.id}">
@@ -318,7 +319,7 @@ const enemy_image = document.getElementById("enemy-image")
 
 // Declarar variables de uso general.
 let user_characters = []
-let player_card = ""
+let player_card = "" // Contiene el HTML de un personaje elegible.
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
@@ -357,4 +358,5 @@ mage.attacks_skills.push(
     { name: "Agua 💧", id: "btn-water" }
 )
 
+// Agregar todos los objetos character a la lista.
 user_characters.push(knight, archer, mage)
