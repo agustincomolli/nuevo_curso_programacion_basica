@@ -24,28 +24,50 @@ function aleatorio(min, max) {
 }
 
 
+function update_health_points() {
+    /* 
+        DESCRIPTION: Actualiza los puntos de vida de los combatientes.
+    */
+    spn_player_health.innerHTML = "❤️".repeat(player_health)
+    spn_enemy_health.innerHTML = "💚".repeat(enemy_health)
+}
+
+
 function select_enemy() {
     /* 
         DESCRIPTION: Selecciona un enemigo de forma aleatoria.
     */
 
-    // Generar un número entre 1 y 3 que representará a un enemigo a elegir:
-    // 1 = ciclop, 2 = orc y 3 = skeleton
-    let enemy_number = aleatorio(1, 3)
+    // Generar un número entre 1 y la cantidad de objetos en la lista enemy_characters
+    // que representará a un enemigo a elegir.
+    let enemy_number = aleatorio(0, enemy_characters.length - 1)
     let enemy_name = ""
 
-    if (enemy_number == 1) {
-        enemy_name = "Esqueleto soldado"
-        enemy_image.src = "./images/skeleton_soldier.png"
-    } else if (enemy_number == 2) {
-        enemy_name = "Esqueleto arquero"
-        enemy_image.src = "./images/skeleton_archer.png"
-    } else {
-        enemy_name = "Esqueleto mago"
-        enemy_image.src = "./images/skeleton_mage.png"
-    }
+    enemy_name = enemy_characters[enemy_number].name
+    enemy_image.src = enemy_characters[enemy_number].image
+    enemy_image.alt = enemy_characters[enemy_number].name
+    enemy_health = enemy_characters[enemy_number].health
 
     spn_enemy.innerHTML = enemy_name
+}
+
+function fill_with_skills(character_name) {
+    /* 
+        DESCRIPTION: Crear los botones que se usarán para realizar ataques.
+        PARAMETERS: character_name: el nombre del personaje elegido.
+    */
+
+    let skill_button = ""
+    // Extraer la lista de ataques del personaje character_name.
+    let skill_list = user_characters.find(character => character.name ===
+        character_name).attacks_skills
+
+    skill_list.forEach((skill) => {
+        skill_button = `
+        <button id="${skill.id}" class="attack-button">${skill.name}</button>
+        `
+        div_attack_buttons.innerHTML += skill_button
+    })
 }
 
 
@@ -57,21 +79,27 @@ function select_warrior() {
     let warrior_selected = ""
 
     if (rd_knight.checked) {
-        warrior_selected = "Caballero"
-        player_image.src = "./images/knight.png"
+        warrior_selected = rd_knight.name
     } else if (rd_archer.checked) {
-        warrior_selected = "Arquero"
-        player_image.src = "./images/archer.png"
+        warrior_selected = rd_archer.name
     } else if (rd_mage.checked) {
-        warrior_selected = "Mago"
-        player_image.src = "./images/mage.png"
+        warrior_selected = rd_mage.name
     } else {
         p_warning_message.style.display = "block"
         return // Salir de la función.
     }
+
+    // Mostrar la imágen del personaje elegido buscando en la lista de
+    // user_character el personaje que coincida con el elegido por el usuario.
+    player_image.src = user_characters.find(character => character.name ===
+        warrior_selected).image
+        player_image.alt = warrior_selected
+
+    player_health = user_characters.find(character => character.name ===
+        warrior_selected).health
+
     // Mostrar el jugador elegido.
     spn_player.innerHTML = warrior_selected
-    //alert("Has seleccionado al " + warrior_selected)
     // Ocultar la sección de selección de jugador
     sec_player_selection.style.display = "none"
     // Mostrar las secciones de ataque y mensajes.
@@ -79,6 +107,10 @@ function select_warrior() {
     sec_combat.style.display = "grid"
 
     select_enemy()
+
+    update_health_points()
+
+    fill_with_skills(warrior_selected)
 }
 
 
@@ -190,9 +222,7 @@ function show_status(match_result) {
     let text_enemy_attack = translate_attack(enemy_attack)
     let text_match_result = translate_result(match_result)
 
-    // Actualizar puntos de vida.
-    spn_player_health.innerHTML = "❤️".repeat(player_health)
-    spn_enemy_health.innerHTML = "💚".repeat(enemy_health)
+    update_health_points()
 
     // Actualizar mensaje de estado.
     p_result.innerHTML = text_match_result
@@ -262,7 +292,7 @@ function fill_with_characters() {
     user_characters.forEach((character) => {
         // Crear un template literario usando las comillas invertidas ``.
         player_card = `
-        <input type="radio" name="warrior" id="rd-${character.id}">
+        <input type="radio" name="${character.name}" id="rd-${character.id}">
         <label class="card" for="rd-${character.id}">
             <img src="${character.image}" alt="${character.name}">
             <p>${character.name}</p>
@@ -270,7 +300,7 @@ function fill_with_characters() {
         `
         div_cards.innerHTML += player_card
     })
-    }
+}
 
 
 function init() {
@@ -294,7 +324,7 @@ function init() {
     div_attack_messages.style.display = "none"
 
     fill_with_characters()
-    
+
     // Inicializar selectores de personajes
     rd_knight = document.getElementById("rd-knight")
     rd_archer = document.getElementById("rd-archer")
@@ -303,38 +333,42 @@ function init() {
 
 
 // Declarar todos los elementos HTML que voy a usar como constantes.
-const div_cards = document.getElementById("div-cards")
 const btn_select = document.getElementById("btn-select")
 const btn_fire = document.getElementById("btn-fire")
 const btn_water = document.getElementById("btn-water")
 const btn_earth = document.getElementById("btn-earth")
 const btn_reset = document.getElementById("btn-reset")
-const sec_attack_selection_selection = document.getElementById
-    ("sec-attack-selection")
-const sec_combat = document.getElementById("sec-combat")
+
+const div_attack_buttons = document.getElementById("div-attack-buttons")
+const div_cards = document.getElementById("div-cards")
 const div_messages = document.getElementById("div-messages")
 const div_attack_messages = document.getElementById
     ("div-attack-messages")
-const p_warning_message = document.getElementById("p-warning-message")
-
 const div_player_attack = document.getElementById("div-player-attack")
 const div_enemy_attack = document.getElementById("div-enemy-attack")
-const player = document.getElementById("spn-player").innerHTML
-const enemy = document.getElementById("spn-enemy").innerHTML
-const spn_player_health = document.getElementById("spn-player_health")
-const spn_enemy_health = document.getElementById("spn-enemy_health")
-const p_result = document.getElementById("p-result")
 
+const sec_attack_selection_selection = document.getElementById
+    ("sec-attack-selection")
+const sec_combat = document.getElementById("sec-combat")
 const sec_player_selection = document.getElementById("sec-player-selection")
 const sec_attack_selection = document.getElementById("sec-attack-selection")
-const spn_player = document.getElementById("spn-player")
-const player_image = document.getElementById("player-image")
 
+const p_result = document.getElementById("p-result")
+const p_warning_message = document.getElementById("p-warning-message")
+
+const spn_player_health = document.getElementById("spn-player_health")
+const spn_enemy_health = document.getElementById("spn-enemy_health")
+const spn_player = document.getElementById("spn-player")
 const spn_enemy = document.getElementById("spn-enemy")
+
+const player = document.getElementById("spn-player").innerHTML
+const player_image = document.getElementById("player-image")
+const enemy = document.getElementById("spn-enemy").innerHTML
 const enemy_image = document.getElementById("enemy-image")
 
 // Declarar variables de uso general.
 let user_characters = []
+let enemy_characters = []
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
@@ -348,6 +382,16 @@ let rd_mage = null
 let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
 let archer = new Character("archer", "Arquero", "./images/archer.png", 3)
 let mage = new Character("mage", "Mago", "./images/mage.png", 3)
+
+// Declarar los objetos que contendrán los enemigos.
+let skeleton_soldier = new Character("skeleton_soldier", "Esqueleto soldado",
+    "./images/skeleton_soldier.png", 3)
+let skeleton_archer = new Character("skeleton_archer", "Esqueleto arquero",
+    "./images/skeleton_archer.png", 3)
+let skeleton_mage = new Character("skeleton_mage", "Esqueleto mago",
+    "./images/skeleton_mage.png", 3)
+let orc = new Character("orc", "Orco", "./images/orc.png", 4)
+let troll = new Character("troll", "Troll", "./images/troll.png", 5)
 
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
@@ -377,5 +421,31 @@ mage.attacks_skills.push(
     { name: "Agua 💧", id: "btn-water" }
 )
 
+skeleton_soldier.attacks_skills.push(
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Fuego 🔥", id: "btn-fire" }
+)
+
+skeleton_archer.attacks_skills.push(
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Agua 💧", id: "btn-water" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Fuego 🔥", id: "btn-fire" }
+)
+
+skeleton_mage.attacks_skills.push(
+    { name: "Fuego 🔥", id: "btn-fire" },
+    { name: "Fuego 🔥", id: "btn-fire" },
+    { name: "Fuego 🔥", id: "btn-fire" },
+    { name: "Tierra 🍃", id: "btn-earth" },
+    { name: "Agua 💧", id: "btn-water" }
+)
+
 // Agregar todos los objetos character a la lista.
 user_characters.push(knight, archer, mage)
+// ... y todos los enemigos.
+enemy_characters.push(skeleton_soldier, skeleton_archer, skeleton_mage)
