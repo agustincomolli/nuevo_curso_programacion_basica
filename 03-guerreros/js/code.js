@@ -250,6 +250,29 @@ function reset_game() {
 }
 
 
+function fill_with_characters() {
+    /* 
+        DESCRIPTION: Llena la página HTML con los personajes elegibles
+                     por el jugador.
+    */
+
+    let player_card = "" // Contiene el HTML de un personaje elegible.
+
+    // Por cada personaje crear una tarjeta con sus valores.
+    user_characters.forEach((character) => {
+        // Crear un template literario usando las comillas invertidas ``.
+        player_card = `
+        <input type="radio" name="warrior" id="rd-${character.id}">
+        <label class="card" for="rd-${character.id}">
+            <img src="${character.image}" alt="${character.name}">
+            <p>${character.name}</p>
+        </label>
+        `
+        div_cards.innerHTML += player_card
+    })
+    }
+
+
 function init() {
     /* 
         DESCRIPTION: Inicializa los elementos del html.
@@ -270,21 +293,17 @@ function init() {
     btn_reset.style.display = "none"
     div_attack_messages.style.display = "none"
 
-    // Por cada personaje crear una tarjeta con sus valores.
-    user_characters.forEach((character) => {
-        // Crear un template literario usando las comillas invertidas ``.
-        player_card = `
-        <input type="radio" name="warrior" id="rd-${character.id}">
-        <label class="card" for="rd-${character.id}">
-            <img src=${character.image}" alt="${character.name}">
-            <p>${character.name}</p>
-        </label>
-        `
-    })
+    fill_with_characters()
+    
+    // Inicializar selectores de personajes
+    rd_knight = document.getElementById("rd-knight")
+    rd_archer = document.getElementById("rd-archer")
+    rd_mage = document.getElementById("rd-mage")
 }
 
 
 // Declarar todos los elementos HTML que voy a usar como constantes.
+const div_cards = document.getElementById("div-cards")
 const btn_select = document.getElementById("btn-select")
 const btn_fire = document.getElementById("btn-fire")
 const btn_water = document.getElementById("btn-water")
@@ -308,9 +327,6 @@ const p_result = document.getElementById("p-result")
 
 const sec_player_selection = document.getElementById("sec-player-selection")
 const sec_attack_selection = document.getElementById("sec-attack-selection")
-const rd_knight = document.getElementById("rd-knight")
-const rd_archer = document.getElementById("rd-archer")
-const rd_mage = document.getElementById("rd-mage")
 const spn_player = document.getElementById("spn-player")
 const player_image = document.getElementById("player-image")
 
@@ -319,11 +335,14 @@ const enemy_image = document.getElementById("enemy-image")
 
 // Declarar variables de uso general.
 let user_characters = []
-let player_card = "" // Contiene el HTML de un personaje elegible.
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
 let enemy_health = 3
+// Declarar variables que tendrán elementos HTML que se llenarán después.
+let rd_knight = null
+let rd_archer = null
+let rd_mage = null
 
 // Declarar objetos que contendrán los personajes a elegir.
 let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
