@@ -225,7 +225,7 @@ input:checked + label {
 }
 
 .attack-button {
-    width: 140px;
+    width: 120px;
     padding: 10px;
     margin: 5px;
     box-sizing: border-box;
