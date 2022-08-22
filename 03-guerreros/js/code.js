@@ -62,7 +62,9 @@ function fill_with_skills(character_name) {
     let skill_list = user_characters.find(character => character.name ===
         character_name).attacks_skills
 
+    // Por cada elemento del diccionario skill_list...
     skill_list.forEach((skill) => {
+        // Crear un botón en HTML con el ataque.
         skill_button = `
         <button id="${skill.id}" class="attack-button" 
         title="${skill.description}">${skill.name}</button>
@@ -70,13 +72,23 @@ function fill_with_skills(character_name) {
         div_attack_buttons.innerHTML += skill_button
     })
 
-    btn_fire = document.getElementById("btn-fire")
-    btn_water = document.getElementById("btn-water")
-    btn_earth = document.getElementById("btn-earth")
-    btn_fire.addEventListener("click", attack)
-    btn_water.addEventListener("click", attack)
-    btn_earth.addEventListener("click", attack)
+    // Crear una lista con todos los botones de ataque creados.
+    attack_buttons = document.querySelectorAll(".attack-button")
+}
 
+
+function create_attack_sequence() {
+    /* 
+       DESCRIPTION: Crear la secuencia de ataques del jugador según los
+                    botones pulsados.
+   */
+
+    attack_buttons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            player_attacks.push(e.target.id.slice(4))
+            button.style = "background:  #c3baa2;"
+        })
+    })
 }
 
 
@@ -120,6 +132,8 @@ function select_warrior() {
     update_health_points()
 
     fill_with_skills(warrior_selected)
+
+    create_attack_sequence()
 }
 
 
@@ -372,6 +386,7 @@ const enemy_image = document.getElementById("enemy-image")
 // Declarar variables de uso general.
 let user_characters = []
 let enemy_characters = []
+let player_attacks = []
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
@@ -380,9 +395,7 @@ let enemy_health = 3
 let rd_knight = null
 let rd_archer = null
 let rd_mage = null
-let btn_fire = null
-let btn_water = null
-let btn_earth = null
+let attack_buttons = []
 
 // Declarar objetos que contendrán los personajes a elegir.
 let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
@@ -404,51 +417,33 @@ window.addEventListener("load", init)
 
 // Agregar habilidades de ataque a cada personaje.
 knight.attacks_skills.push(
-    { name: "💪", id: "btn-earth", description: "Golpe devastador" },
-    { name: "⚔️", id: "btn-earth", description: "Choque de espadas" },
-    { name: "🏃‍♂️🛡️🗡️", id: "btn-earth", description: "Embestida final" },
-    { name: "🛡️", id: "btn-water", description: "Aturdir con escudo" },
-    { name: "🗡️🔥", id: "btn-fire", description: "Espada llameante" }
+    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
+    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
+    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
+    { id: "btn-water", name: "💧", description: "Agua 💧" },
+    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" }
 )
 
 archer.attacks_skills.push(
-    { name: "🎯", id: "btn-water", description: "Tiro de francotirador" },
-    { name: "🔀", id: "btn-water", description: "Tiro doble" },
-    { name: "💘", id: "btn-water", description: "Tiro al corazón" },
-    { name: "🍃", id: "btn-earth", description: "Señuelo" },
-    { name: "➡️🔥", id: "btn-fire", description: "Flecha incendiaria" }
+    { id: "btn-water", name: "💧", description: "Agua 💧" },
+    { id: "btn-water", name: "💧", description: "Agua 💧" },
+    { id: "btn-water", name: "💧", description: "Agua 💧" },
+    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
+    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" }
 )
 
 mage.attacks_skills.push(
-    { name: "🔥", id: "btn-fire", description: "Bola de fuego" },
-    { name: "☄️", id: "btn-fire", description: "Meteoro" },
-    { name: "🌧️🪨", id: "btn-earth", description: "Lluvia de piedras" },
-    { name: "🌊", id: "btn-water", description: "Ola de mar" }
+    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
+    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
+    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
+    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
+    { id: "btn-water", name: "💧", description: "Agua 💧" }
 )
 
-skeleton_soldier.attacks_skills.push(
-    { name: "Tierra 🍃", id: "btn-earth", description: "" },
-    { name: "Tierra 🍃", id: "btn-earth", description: "" },
-    { name: "Tierra 🍃", id: "btn-earth", description: "" },
-    { name: "Agua 💧", id: "btn-water", description: "" },
-    { name: "Fuego 🔥", id: "btn-fire", description: "" }
-)
-
-skeleton_archer.attacks_skills.push(
-    { name: "Agua 💧", id: "btn-water", description: "" },
-    { name: "Agua 💧", id: "btn-water", description: "" },
-    { name: "Agua 💧", id: "btn-water", description: "" },
-    { name: "Tierra 🍃", id: "btn-earth", description: "" },
-    { name: "Fuego 🔥", id: "btn-fire", description: "" }
-)
-
-skeleton_mage.attacks_skills.push(
-    { name: "Fuego 🔥", id: "btn-fire", description: "" },
-    { name: "Fuego 🔥", id: "btn-fire", description: "" },
-    { name: "Fuego 🔥", id: "btn-fire", description: "" },
-    { name: "Tierra 🍃", id: "btn-earth", description: "" },
-    { name: "Agua 💧", id: "btn-water", description: "" }
-)
+// Los enemigos tendrán las mismas skills que los personajes a elegir.
+skeleton_soldier.attacks_skills.push(knight.attacks_skills)
+skeleton_archer.attacks_skills.push(archer.attacks_skills)
+skeleton_mage.attacks_skills.push(mage.attacks_skills)
 
 // Agregar todos los objetos character a la lista.
 user_characters.push(knight, archer, mage)
