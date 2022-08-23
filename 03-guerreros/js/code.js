@@ -51,6 +51,23 @@ function select_enemy() {
     spn_enemy.innerHTML = enemy_name
 }
 
+
+function generate_enemy_attack(){
+    /* 
+        DESCRIPTION: Según el personaje enemigo generar una lista con ataques 
+                     aleatorios.
+    */
+
+    let enemy_name = ""
+    let enemy_skills = null
+
+    enemy_name = spn_enemy.innerHTML
+    enemy_skills = enemy_characters.find(character => character.name === 
+        enemy_name).attacks_skills
+    console.log(enemy_skills)
+}
+
+
 function fill_with_skills(character_name) {
     /* 
         DESCRIPTION: Crear los botones que se usarán para realizar ataques.
@@ -89,6 +106,7 @@ function create_attack_sequence() {
             button.style = "background:  #c3baa2;"
         })
     })
+    generate_enemy_attack()
 }
 
 
@@ -98,14 +116,17 @@ function select_warrior() {
     */
 
     let warrior_selected = ""
+    // Crear una lista con todos los inputs.
+    let rd_character_list = document.querySelectorAll("input[type='radio']")
 
-    if (rd_knight.checked) {
-        warrior_selected = rd_knight.name
-    } else if (rd_archer.checked) {
-        warrior_selected = rd_archer.name
-    } else if (rd_mage.checked) {
-        warrior_selected = rd_mage.name
-    } else {
+    // Recorrer la lista para ver cuál está seleccionado.
+    rd_character_list.forEach((character) => {
+        if (character.checked) {
+            warrior_selected = character.name
+        }
+    })
+
+    if (warrior_selected == "") {
         p_warning_message.style.display = "block"
         return // Salir de la función.
     }
@@ -313,7 +334,8 @@ function fill_with_characters() {
 
     // Por cada personaje crear una tarjeta con sus valores.
     user_characters.forEach((character) => {
-        // Crear un template literario usando las comillas invertidas ``.
+        // Crear un template literario usando las comillas invertidas `` que
+        // tendrá los elementos que forman al personaje a elegir.
         player_card = `
         <input type="radio" name="${character.name}" id="rd-${character.id}">
         <label class="card" for="rd-${character.id}">
@@ -322,6 +344,7 @@ function fill_with_characters() {
         </label>
         `
         div_cards.innerHTML += player_card
+        // Crear un lista con todos los elementos radio button.
     })
 }
 
@@ -344,11 +367,6 @@ function init() {
     div_attack_messages.style.display = "none"
 
     fill_with_characters()
-
-    // Inicializar selectores de personajes
-    rd_knight = document.getElementById("rd-knight")
-    rd_archer = document.getElementById("rd-archer")
-    rd_mage = document.getElementById("rd-mage")
 }
 
 
@@ -384,17 +402,15 @@ const enemy = document.getElementById("spn-enemy").innerHTML
 const enemy_image = document.getElementById("enemy-image")
 
 // Declarar variables de uso general.
-let user_characters = []
-let enemy_characters = []
-let player_attacks = []
+let user_characters = []    // Contendrá los personajes a elegir.
+let enemy_characters = []   // Contendrá los enemigos a elegir.
+let player_attacks = []     // Secuencia de ataques del jugador.
+let enemy_attacks = []      // Secuencia de ataques del enemigo.
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
 let enemy_health = 3
 // Declarar variables que tendrán elementos HTML que se llenarán después.
-let rd_knight = null
-let rd_archer = null
-let rd_mage = null
 let attack_buttons = []
 
 // Declarar objetos que contendrán los personajes a elegir.
