@@ -1,0 +1,4 @@
+Crear un diccionario de ataques:
+    cargar 5 ataques por personaje.
+    seleccionar de forma aleatoria 4 ataques por oponente.
+    el 1º ataque derrota al 2º, el 2º al 3º... y el último al 1º

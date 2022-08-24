@@ -100,7 +100,7 @@ function randomize_list(list = []) {
         // Borrar el item de la lista principal.
         list.splice(temp_idx, 1)
     }
-    
+
     return temp_list
 }
 
@@ -133,7 +133,7 @@ function select_enemy() {
 }
 
 
-function generate_enemy_attack() {
+function generate_enemy_attacks() {
     /* 
         DESCRIPTION: Según el personaje enemigo generar una lista con ataques 
                      aleatorios.
@@ -146,6 +146,7 @@ function generate_enemy_attack() {
     enemy_name = spn_enemy.innerHTML
     enemy_skills = enemy_characters.find(character => character.name ===
         enemy_name).attacks_skills
+    // Generar una lista con los nombres de los ataques
     enemy_skills[0].forEach((skill) => {
         skill_list.push(skill.id.slice(4))
     })
@@ -179,7 +180,7 @@ function fill_with_skills(character_name) {
 }
 
 
-function create_attack_sequence() {
+function generate_player_attacks() {
     /* 
        DESCRIPTION: Crear la secuencia de ataques del jugador según los
                     botones pulsados.
@@ -189,9 +190,10 @@ function create_attack_sequence() {
         button.addEventListener("click", (e) => {
             player_attacks.push(e.target.id.slice(4))
             button.style = "background:  #c3baa2;"
+            button.disabled = true
         })
     })
-    generate_enemy_attack()
+    generate_enemy_attacks()
 }
 
 
@@ -221,7 +223,8 @@ function select_warrior() {
     player_image.src = user_characters.find(character => character.name ===
         warrior_selected).image
     player_image.alt = warrior_selected
-
+    
+    // Obtener la cantidad de vida del personaje elegido.
     player_health = user_characters.find(character => character.name ===
         warrior_selected).health
 
@@ -239,7 +242,7 @@ function select_warrior() {
 
     fill_with_skills(warrior_selected)
 
-    create_attack_sequence()
+    generate_player_attacks()
 }
 
 
@@ -332,9 +335,9 @@ function check_health() {
 
 
     // Deshabilitar botones de ataque.
-    btn_fire.disabled = true
-    btn_water.disabled = true
-    btn_earth.disabled = true
+    attack_buttons.forEach((button) => {
+        button.disabled = true
+    })
     // Mostrar el botón reiniciar.
     btn_reset.style.display = "block"
 }
@@ -381,12 +384,13 @@ function attack(event) {
     }
 
     if (event.target.id == "btn-earth") {
-        player_attack = 1 // Cuerpo a cuarpo
+        player_attack = 1 // Ataque de tierra.
     } else if (event.target.id == "btn-water") {
-        player_attack = 2 // Rango
+        player_attack = 2 // Ataque de agua.
     } else {
-        player_attack = 3 // Magia
+        player_attack = 3 // Ataque de fuego.
     }
+    console.log(player_attack)
 
     // Generar un número entre 1 y 3 que representará el ataque enemigo:
     enemy_attack = get_random_number(1, 3)
@@ -468,17 +472,17 @@ knight.attacks_skills.push(
 )
 
 archer.attacks_skills.push(
-    { id: "btn-water", name: "💧", description: "Agua 💧" },
-    { id: "btn-water", name: "💧", description: "Agua 💧" },
-    { id: "btn-water", name: "💧", description: "Agua 💧" },
+   { id: "btn-water", name: "💧", description: "Agua 💧" },
+   { id: "btn-water", name: "💧", description: "Agua 💧" },
+   { id: "btn-water", name: "💧", description: "Agua 💧" },
     { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
     { id: "btn-fire", name: "🔥", description: "Fuego 🔥" }
 )
 
 mage.attacks_skills.push(
-    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
-    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
-    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
+   { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
+   { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
+   { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
     { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
     { id: "btn-water", name: "💧", description: "Agua 💧" }
 )
