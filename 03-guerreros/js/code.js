@@ -13,7 +13,66 @@ class Character {
 }
 
 
-function aleatorio(min, max) {
+// Declarar todos los elementos HTML que voy a usar como constantes.
+const btn_select = document.getElementById("btn-select")
+const btn_reset = document.getElementById("btn-reset")
+
+const div_attack_buttons = document.getElementById("div-attack-buttons")
+const div_cards = document.getElementById("div-cards")
+const div_messages = document.getElementById("div-messages")
+const div_attack_messages = document.getElementById
+    ("div-attack-messages")
+const div_player_attack = document.getElementById("div-player-attack")
+const div_enemy_attack = document.getElementById("div-enemy-attack")
+
+const sec_attack_selection_selection = document.getElementById
+    ("sec-attack-selection")
+const sec_combat = document.getElementById("sec-combat")
+const sec_player_selection = document.getElementById("sec-player-selection")
+const sec_attack_selection = document.getElementById("sec-attack-selection")
+
+const p_result = document.getElementById("p-result")
+const p_warning_message = document.getElementById("p-warning-message")
+
+const spn_player_health = document.getElementById("spn-player_health")
+const spn_enemy_health = document.getElementById("spn-enemy_health")
+const spn_player = document.getElementById("spn-player")
+const spn_enemy = document.getElementById("spn-enemy")
+
+const player = document.getElementById("spn-player").innerHTML
+const player_image = document.getElementById("player-image")
+const enemy = document.getElementById("spn-enemy").innerHTML
+const enemy_image = document.getElementById("enemy-image")
+
+// Declarar variables de uso general.
+let user_characters = []    // Contendrá los personajes a elegir.
+let enemy_characters = []   // Contendrá los enemigos a elegir.
+let player_attacks = []     // Secuencia de ataques del jugador.
+let enemy_attacks = []      // Secuencia de ataques del enemigo.
+let player_attack = 0
+let enemy_attack = 0
+let player_health = 3
+let enemy_health = 3
+// Declarar variables que tendrán elementos HTML que se llenarán después.
+let attack_buttons = []
+
+// Declarar objetos que contendrán los personajes a elegir.
+let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
+let archer = new Character("archer", "Arquero", "./images/archer.png", 3)
+let mage = new Character("mage", "Mago", "./images/mage.png", 3)
+
+// Declarar los objetos que contendrán los enemigos.
+let skeleton_soldier = new Character("skeleton_soldier", "Esqueleto soldado",
+    "./images/skeleton_soldier.png", 3)
+let skeleton_archer = new Character("skeleton_archer", "Esqueleto arquero",
+    "./images/skeleton_archer.png", 3)
+let skeleton_mage = new Character("skeleton_mage", "Esqueleto mago",
+    "./images/skeleton_mage.png", 3)
+let orc = new Character("orc", "Orco", "./images/orc.png", 4)
+let troll = new Character("troll", "Troll", "./images/troll.png", 5)
+
+
+function get_random_number(min, max) {
     /* 
         DESCRIPTION: Genera un número aleatorio entre el min y el max.
         PARAMETERS:
@@ -21,6 +80,28 @@ function aleatorio(min, max) {
                     max = valor máximo
     */
     return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+
+function randomize_list(list = []) {
+    /* 
+        DESCRIPTION: Devuelve una lista ordenada de forma aleatoria.
+    */
+
+    let temp_list = []
+    let temp_idx = 0
+
+    while (list.length > 0) {
+        // Obtener de forma aleatoria un número de índice entre el 1° y 
+        // último valor de la lista principal.
+        temp_idx = get_random_number(0, list.length - 1)
+        // Agregarel item a la lista temporal.
+        temp_list.push(list[temp_idx])
+        // Borrar el item de la lista principal.
+        list.splice(temp_idx, 1)
+    }
+    
+    return temp_list
 }
 
 
@@ -40,7 +121,7 @@ function select_enemy() {
 
     // Generar un número entre 1 y la cantidad de objetos en la lista enemy_characters
     // que representará a un enemigo a elegir.
-    let enemy_number = aleatorio(0, enemy_characters.length - 1)
+    let enemy_number = get_random_number(0, enemy_characters.length - 1)
     let enemy_name = ""
 
     enemy_name = enemy_characters[enemy_number].name
@@ -52,7 +133,7 @@ function select_enemy() {
 }
 
 
-function generate_enemy_attack(){
+function generate_enemy_attack() {
     /* 
         DESCRIPTION: Según el personaje enemigo generar una lista con ataques 
                      aleatorios.
@@ -60,11 +141,15 @@ function generate_enemy_attack(){
 
     let enemy_name = ""
     let enemy_skills = null
+    let skill_list = []
 
     enemy_name = spn_enemy.innerHTML
-    enemy_skills = enemy_characters.find(character => character.name === 
+    enemy_skills = enemy_characters.find(character => character.name ===
         enemy_name).attacks_skills
-    console.log(enemy_skills)
+    enemy_skills[0].forEach((skill) => {
+        skill_list.push(skill.id.slice(4))
+    })
+    enemy_attacks = randomize_list(skill_list)
 }
 
 
@@ -304,7 +389,7 @@ function attack(event) {
     }
 
     // Generar un número entre 1 y 3 que representará el ataque enemigo:
-    enemy_attack = aleatorio(1, 3)
+    enemy_attack = get_random_number(1, 3)
 
     match_result = lets_combat(player_attack, enemy_attack)
 
@@ -369,64 +454,6 @@ function init() {
     fill_with_characters()
 }
 
-
-// Declarar todos los elementos HTML que voy a usar como constantes.
-const btn_select = document.getElementById("btn-select")
-const btn_reset = document.getElementById("btn-reset")
-
-const div_attack_buttons = document.getElementById("div-attack-buttons")
-const div_cards = document.getElementById("div-cards")
-const div_messages = document.getElementById("div-messages")
-const div_attack_messages = document.getElementById
-    ("div-attack-messages")
-const div_player_attack = document.getElementById("div-player-attack")
-const div_enemy_attack = document.getElementById("div-enemy-attack")
-
-const sec_attack_selection_selection = document.getElementById
-    ("sec-attack-selection")
-const sec_combat = document.getElementById("sec-combat")
-const sec_player_selection = document.getElementById("sec-player-selection")
-const sec_attack_selection = document.getElementById("sec-attack-selection")
-
-const p_result = document.getElementById("p-result")
-const p_warning_message = document.getElementById("p-warning-message")
-
-const spn_player_health = document.getElementById("spn-player_health")
-const spn_enemy_health = document.getElementById("spn-enemy_health")
-const spn_player = document.getElementById("spn-player")
-const spn_enemy = document.getElementById("spn-enemy")
-
-const player = document.getElementById("spn-player").innerHTML
-const player_image = document.getElementById("player-image")
-const enemy = document.getElementById("spn-enemy").innerHTML
-const enemy_image = document.getElementById("enemy-image")
-
-// Declarar variables de uso general.
-let user_characters = []    // Contendrá los personajes a elegir.
-let enemy_characters = []   // Contendrá los enemigos a elegir.
-let player_attacks = []     // Secuencia de ataques del jugador.
-let enemy_attacks = []      // Secuencia de ataques del enemigo.
-let player_attack = 0
-let enemy_attack = 0
-let player_health = 3
-let enemy_health = 3
-// Declarar variables que tendrán elementos HTML que se llenarán después.
-let attack_buttons = []
-
-// Declarar objetos que contendrán los personajes a elegir.
-let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
-let archer = new Character("archer", "Arquero", "./images/archer.png", 3)
-let mage = new Character("mage", "Mago", "./images/mage.png", 3)
-
-// Declarar los objetos que contendrán los enemigos.
-let skeleton_soldier = new Character("skeleton_soldier", "Esqueleto soldado",
-    "./images/skeleton_soldier.png", 3)
-let skeleton_archer = new Character("skeleton_archer", "Esqueleto arquero",
-    "./images/skeleton_archer.png", 3)
-let skeleton_mage = new Character("skeleton_mage", "Esqueleto mago",
-    "./images/skeleton_mage.png", 3)
-let orc = new Character("orc", "Orco", "./images/orc.png", 4)
-let troll = new Character("troll", "Troll", "./images/troll.png", 5)
 
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
