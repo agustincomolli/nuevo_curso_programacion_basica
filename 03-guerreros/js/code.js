@@ -147,7 +147,7 @@ function generate_enemy_attacks() {
     enemy_skills = enemy_characters.find(character => character.name ===
         enemy_name).attacks_skills
     // Generar una lista con los nombres de los ataques
-    enemy_skills[0].forEach((skill) => {
+    enemy_skills.forEach((skill) => {
         skill_list.push(skill.id.slice(4))
     })
     enemy_attacks = randomize_list(skill_list)
@@ -169,8 +169,10 @@ function fill_with_skills(character_name) {
     skill_list.forEach((skill) => {
         // Crear un botón en HTML con el ataque.
         skill_button = `
-        <button id="${skill.id}" class="attack-button" 
-        title="${skill.description}">${skill.name}</button>
+        <button id="btn-${skill.id}" class="attack-button" 
+        title="${skill.description}"> ${skill.description}
+        <img src='${skill.image}'/>
+        </button>
         `
         div_attack_buttons.innerHTML += skill_button
     })
@@ -187,11 +189,13 @@ function generate_player_attacks() {
    */
 
     attack_buttons.forEach((button) => {
-        button.addEventListener("click", (e) => {
+/*         button.addEventListener("click", (e) => {
             player_attacks.push(e.target.id.slice(4))
             button.style = "background:  #c3baa2;"
             button.disabled = true
         })
+ */        
+        button.addEventListener("click", attack)
     })
     generate_enemy_attacks()
 }
@@ -223,7 +227,7 @@ function select_warrior() {
     player_image.src = user_characters.find(character => character.name ===
         warrior_selected).image
     player_image.alt = warrior_selected
-    
+
     // Obtener la cantidad de vida del personaje elegido.
     player_health = user_characters.find(character => character.name ===
         warrior_selected).health
@@ -383,14 +387,13 @@ function attack(event) {
         div_attack_messages.style.display = "grid"
     }
 
-    if (event.target.id == "btn-earth") {
+    if (event.currentTarget.id.slice(4) == "earth") {
         player_attack = 1 // Ataque de tierra.
-    } else if (event.target.id == "btn-water") {
+    } else if (event.currentTarget.id.slice(4) == "water") {
         player_attack = 2 // Ataque de agua.
     } else {
         player_attack = 3 // Ataque de fuego.
     }
-    console.log(player_attack)
 
     // Generar un número entre 1 y 3 que representará el ataque enemigo:
     enemy_attack = get_random_number(1, 3)
@@ -464,33 +467,34 @@ window.addEventListener("load", init)
 
 // Agregar habilidades de ataque a cada personaje.
 knight.attacks_skills.push(
-    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
-    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
-    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
-    { id: "btn-water", name: "💧", description: "Agua 💧" },
-    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" }
+    {
+        id: "earth",
+        image: "./images/Battle_Slow_icon.png",
+        value: 1,
+        description: "Tierra " //🍃
+    },
+    {
+        id: "water",
+        image: "./images/Water_Ring_icon.png",
+        value: 2,
+        description: "Agua "//💧
+    },
+    {
+        id: "fire",
+        image: "./images/Fireball.png",
+        value: 3,
+        description: "Fuego " // 🔥
+    },
 )
 
-archer.attacks_skills.push(
-   { id: "btn-water", name: "💧", description: "Agua 💧" },
-   { id: "btn-water", name: "💧", description: "Agua 💧" },
-   { id: "btn-water", name: "💧", description: "Agua 💧" },
-    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
-    { id: "btn-fire", name: "🔥", description: "Fuego 🔥" }
-)
+archer.attacks_skills = knight.attacks_skills
 
-mage.attacks_skills.push(
-   { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
-   { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
-   { id: "btn-fire", name: "🔥", description: "Fuego 🔥" },
-    { id: "btn-earth", name: "🍃", description: "Tierra 🍃" },
-    { id: "btn-water", name: "💧", description: "Agua 💧" }
-)
+mage.attacks_skills = knight.attacks_skills
 
 // Los enemigos tendrán las mismas skills que los personajes a elegir.
-skeleton_soldier.attacks_skills.push(knight.attacks_skills)
-skeleton_archer.attacks_skills.push(archer.attacks_skills)
-skeleton_mage.attacks_skills.push(mage.attacks_skills)
+skeleton_soldier.attacks_skills = knight.attacks_skills
+skeleton_archer.attacks_skills = archer.attacks_skills
+skeleton_mage.attacks_skills = mage.attacks_skills
 
 // Agregar todos los objetos character a la lista.
 user_characters.push(knight, archer, mage)

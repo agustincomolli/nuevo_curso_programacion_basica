@@ -225,7 +225,7 @@ input:checked + label {
 }
 
 .attack-button {
-    width: 80px;
+    width: 140px;
     padding: 10px;
     margin: 5px;
     box-sizing: border-box;
@@ -235,6 +235,12 @@ input:checked + label {
     font-family: 'Bangers', cursive;
     font-size:larger;
     color: #3F4E4F;
+}
+
+.attack-button img {
+    vertical-align: middle;
+    height: 40px;
+     width: 40px;
 }
 
 #div-messages {
