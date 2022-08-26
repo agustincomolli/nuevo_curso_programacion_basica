@@ -54,7 +54,6 @@ let enemy_attack = 0
 let player_health = 3
 let enemy_health = 3
 // Declarar variables que tendrán elementos HTML que se llenarán después.
-let attack_buttons = []
 
 // Declarar objetos que contendrán los personajes a elegir.
 let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
@@ -135,22 +134,14 @@ function select_enemy() {
 
 function generate_enemy_attacks() {
     /* 
-        DESCRIPTION: Según el personaje enemigo generar una lista con ataques 
-                     aleatorios.
+        DESCRIPTION: Crear una lista con todos los ataques del enemigo.
     */
 
     let enemy_name = ""
-    let enemy_skills = null
-    let skill_list = []
 
     enemy_name = spn_enemy.innerHTML
-    enemy_skills = enemy_characters.find(character => character.name ===
+    enemy_attacks = enemy_characters.find(character => character.name ===
         enemy_name).attacks_skills
-    // Generar una lista con los nombres de los ataques
-    enemy_skills.forEach((skill) => {
-        skill_list.push(skill.id.slice(4))
-    })
-    enemy_attacks = randomize_list(skill_list)
 }
 
 
@@ -170,34 +161,29 @@ function fill_with_skills(character_name) {
         // Crear un botón en HTML con el ataque.
         skill_button = `
         <button id="btn-${skill.id}" class="attack-button" 
-        title="${skill.description}"> ${skill.description}
+        title="${skill.description}">
         <img src='${skill.image}'/>
         </button>
         `
         div_attack_buttons.innerHTML += skill_button
     })
-
-    // Crear una lista con todos los botones de ataque creados.
-    attack_buttons = document.querySelectorAll(".attack-button")
+    // Guardar los ataques que puede hacer el jugador.
+    player_attacks = skill_list
 }
 
 
-function generate_player_attacks() {
+function add_click_event() {
     /* 
-       DESCRIPTION: Crear la secuencia de ataques del jugador según los
-                    botones pulsados.
+       DESCRIPTION: Agrega el eventListener "click" a los botones creados.
    */
 
+    let attack_buttons = []
+    // Crear una lista con todos los botones de ataque creados.
+    attack_buttons = document.querySelectorAll(".attack-button")
+
     attack_buttons.forEach((button) => {
-/*         button.addEventListener("click", (e) => {
-            player_attacks.push(e.target.id.slice(4))
-            button.style = "background:  #c3baa2;"
-            button.disabled = true
-        })
- */        
         button.addEventListener("click", attack)
     })
-    generate_enemy_attacks()
 }
 
 
@@ -246,7 +232,7 @@ function select_warrior() {
 
     fill_with_skills(warrior_selected)
 
-    generate_player_attacks()
+    add_click_event()
 }
 
 
@@ -362,9 +348,9 @@ function show_status(match_result) {
 
     // Actualizar mensaje de estado.
     p_result.innerHTML = text_match_result
-    player_message.innerHTML = "Ataque de " + text_player_attack
+    player_message.innerHTML = text_player_attack
     div_player_attack.appendChild(player_message)
-    enemy_message.innerHTML = "Ataque de " + text_enemy_attack
+    enemy_message.innerHTML = text_enemy_attack
     div_enemy_attack.appendChild(enemy_message)
 
     check_health()
@@ -381,18 +367,15 @@ function attack(event) {
     */
 
     let match_result = 0
+    // Buscar em la lista de skills del personaje cuál es el valor del ataque.
+    let attack_id = event.currentTarget.id.slice(4)
+    player_skills = user_characters.find(character => character.name ===
+        spn_player.innerHTML).attacks_skills
+    player_attack = player_skills.find(skill => skill.id === attack_id).value
 
     if (div_messages.style.display == "none") {
         div_messages.style.display = "flex"
         div_attack_messages.style.display = "grid"
-    }
-
-    if (event.currentTarget.id.slice(4) == "earth") {
-        player_attack = 1 // Ataque de tierra.
-    } else if (event.currentTarget.id.slice(4) == "water") {
-        player_attack = 2 // Ataque de agua.
-    } else {
-        player_attack = 3 // Ataque de fuego.
     }
 
     // Generar un número entre 1 y 3 que representará el ataque enemigo:
@@ -468,28 +451,66 @@ window.addEventListener("load", init)
 // Agregar habilidades de ataque a cada personaje.
 knight.attacks_skills.push(
     {
-        id: "earth",
-        image: "./images/Battle_Slow_icon.png",
+        id: "power_strike",
+        image: "./images/power_strike.png",
         value: 1,
-        description: "Tierra " //🍃
+        description: "Golpe de poder" //🍃
     },
     {
-        id: "water",
-        image: "./images/Water_Ring_icon.png",
+        id: "retaliation",
+        image: "./images/retaliation.png",
         value: 2,
-        description: "Agua "//💧
+        description: "Represalias"//💧
     },
     {
-        id: "fire",
-        image: "./images/Fireball.png",
+        id: "sword_storm",
+        image: "./images/sword_storm.png",
         value: 3,
-        description: "Fuego " // 🔥
+        description: "Tormenta de espadas" // 🔥
     },
 )
 
-archer.attacks_skills = knight.attacks_skills
+archer.attacks_skills.push(
+    {
+        id: "simple-shot",
+        image: "./images/simple-shot.png",
+        value: 1,
+        description: "Tiro simple" //🍃
+    },
+    {
+        id: "headshot",
+        image: "./images/headshot.png",
+        value: 2,
+        description: "Tiro en la cabeza"//💧
+    },
+    {
+        id: "fire_arrow",
+        image: "./images/fire_arrow.png",
+        value: 3,
+        description: "Flecha de fuego" // 🔥
+    },
+)
 
-mage.attacks_skills = knight.attacks_skills
+mage.attacks_skills.push(
+    {
+        id: "lightning_bolts",
+        image: "./images/lightning_bolts.png",
+        value: 1,
+        description: "Relámpagos" //🍃
+    },
+    {
+        id: "tsunami",
+        image: "./images/tsunami.png",
+        value: 2,
+        description: "Tsunami"//💧
+    },
+    {
+        id: "fireball",
+        image: "./images/fireball.png",
+        value: 3,
+        description: "Bola de fuego" // 🔥
+    },
+)
 
 // Los enemigos tendrán las mismas skills que los personajes a elegir.
 skeleton_soldier.attacks_skills = knight.attacks_skills

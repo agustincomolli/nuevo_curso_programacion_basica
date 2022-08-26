@@ -207,6 +207,7 @@ input:checked + label {
     font-family: 'Bangers', cursive;
     font-size:x-large;
     color: #3F4E4F;
+    margin-top: 10px;
 }
 
 #p-warning-message {
