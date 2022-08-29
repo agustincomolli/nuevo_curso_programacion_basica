@@ -26,6 +26,7 @@ body {
     display: grid;
     grid-template-areas: "header"
                          "player-selection"
+                         "map"
                          "attack-selection"
                          "combat"
                          "footer";
@@ -40,6 +41,10 @@ body {
 
 .player-selection {
     grid-area: player-selection;
+}
+
+.view-map {
+    grid-area: map;
 }
 
 .attack-selection {
@@ -218,6 +223,21 @@ input:checked + label {
     padding: 10px;
     text-align: center;
     width: 400px;}
+
+#sec-view-map {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#sec-view-map h2 {
+    margin-block-end: 0.5em;
+    margin-block-start: 0.5em;
+}
+
+#map {
+    border: 2px solid #DCD7C9;
+}
 
 #sec-attack-selection {
     display: flex;

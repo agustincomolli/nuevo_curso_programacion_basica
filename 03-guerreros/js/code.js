@@ -9,6 +9,10 @@ class Character {
         this.image = image
         this.health = health
         this.attacks_skills = []
+        this.x = 20
+        this.y = 30
+        this.width = 80
+        this.height = 80
     }
 }
 
@@ -16,6 +20,7 @@ class Character {
 // Declarar todos los elementos HTML que voy a usar como constantes.
 const btn_select = document.getElementById("btn-select")
 const btn_reset = document.getElementById("btn-reset")
+const btn_move = document.getElementById("btn-move")
 
 const div_attack_buttons = document.getElementById("div-attack-buttons")
 const div_cards = document.getElementById("div-cards")
@@ -30,6 +35,7 @@ const sec_attack_selection_selection = document.getElementById
 const sec_combat = document.getElementById("sec-combat")
 const sec_player_selection = document.getElementById("sec-player-selection")
 const sec_attack_selection = document.getElementById("sec-attack-selection")
+const sec_view_map = document.getElementById("sec-view-map")
 
 const p_result = document.getElementById("p-result")
 const p_warning_message = document.getElementById("p-warning-message")
@@ -43,17 +49,19 @@ const player = document.getElementById("spn-player").innerHTML
 const player_image = document.getElementById("player-image")
 const enemy = document.getElementById("spn-enemy").innerHTML
 const enemy_image = document.getElementById("enemy-image")
+const mapa = document.getElementById("map")
 
 // Declarar variables de uso general.
 let user_characters = []    // Contendrá los personajes a elegir.
 let enemy_characters = []   // Contendrá los enemigos a elegir.
 let player_attacks = []     // Secuencia de ataques del jugador.
 let enemy_attacks = []      // Secuencia de ataques del enemigo.
+let player_character = null
+let enemy_character = null
 let player_attack = 0
 let enemy_attack = 0
 let player_health = 3
 let enemy_health = 3
-// Declarar variables que tendrán elementos HTML que se llenarán después.
 
 // Declarar objetos que contendrán los personajes a elegir.
 let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
@@ -70,6 +78,8 @@ let skeleton_mage = new Character("skeleton_mage", "Esqueleto mago",
     "./images/skeleton_mage.png", 3)
 let orc = new Character("orc", "Orco", "./images/orc.png", 4)
 let troll = new Character("troll", "Troll", "./images/troll.png", 5)
+
+let canvas = map.getContext("2d")
 
 
 function get_random_number(min, max) {
@@ -114,6 +124,22 @@ function update_health_points() {
 }
 
 
+function draw_player() {
+    /* 
+        DESCRIPTION: Actualiza los puntos de vida de los combatientes.
+    */
+
+    let player_selected = user_characters.find(character => character.name ===
+        spn_player)
+    canvas.drawImage(
+        player_selected.image,
+        player_selected.x,
+        player_selected.y,
+        player_selected.width,
+        player_selected.height
+    )
+}
+
 function select_enemy() {
     /* 
         DESCRIPTION: Selecciona un enemigo de forma aleatoria.
@@ -124,19 +150,20 @@ function select_enemy() {
     let enemy_number = get_random_number(0, enemy_characters.length - 1)
     let enemy_name = ""
 
-    enemy_name = enemy_characters[enemy_number].name
-    enemy_image.src = enemy_characters[enemy_number].image
-    enemy_image.alt = enemy_characters[enemy_number].name
-    enemy_health = enemy_characters[enemy_number].health
+    enemy_character = enemy_characters[enemy_number]
+
+    enemy_name = enemy_character.name
+    enemy_image.src = enemy_character.image
+    enemy_image.alt = enemy_character.name
+    enemy_health = enemy_character.health
 
     spn_enemy.innerHTML = enemy_name
     // Crear una lista con todos los ataques del enemigo.
-    enemy_attacks = enemy_characters.find(character => character.name ===
-        enemy_name).attacks_skills
+    enemy_attacks = enemy_character.attacks_skills
 }
 
 
-function fill_with_skills(character_name) {
+function fill_with_skills() {
     /* 
         DESCRIPTION: Crear los botones que se usarán para realizar ataques.
         PARAMETERS: character_name: el nombre del personaje elegido.
@@ -144,8 +171,7 @@ function fill_with_skills(character_name) {
 
     let skill_button = ""
     // Extraer la lista de ataques del personaje character_name.
-    let skill_list = user_characters.find(character => character.name ===
-        character_name).attacks_skills
+    let skill_list = player_character.attacks_skills
 
     // Por cada elemento del diccionario skill_list...
     skill_list.forEach((skill) => {
@@ -158,8 +184,6 @@ function fill_with_skills(character_name) {
         `
         div_attack_buttons.innerHTML += skill_button
     })
-    // Guardar los ataques que puede hacer el jugador.
-    player_attacks = skill_list
 }
 
 
@@ -201,27 +225,29 @@ function select_warrior() {
 
     // Mostrar la imágen del personaje elegido buscando en la lista de
     // user_character el personaje que coincida con el elegido por el usuario.
-    player_image.src = user_characters.find(character => character.name ===
-        warrior_selected).image
-    player_image.alt = warrior_selected
+    player_character = user_characters.find(character => character.name ===
+        warrior_selected)
+    player_image.src = player_character.image
+    player_image.alt = player_character.name
 
     // Obtener la cantidad de vida del personaje elegido.
-    player_health = user_characters.find(character => character.name ===
-        warrior_selected).health
+    player_health = player_character.health
 
     // Mostrar el jugador elegido.
-    spn_player.innerHTML = warrior_selected
+    spn_player.innerHTML = player_character.name
     // Ocultar la sección de selección de jugador
     sec_player_selection.style.display = "none"
+    // Mostrar la sección del mapa.
+    // sec_view_map.style.display = "flex"
+
     // Mostrar las secciones de ataque y mensajes.
     sec_attack_selection.style.display = "flex"
     sec_combat.style.display = "grid"
-
     select_enemy()
 
     update_health_points()
 
-    fill_with_skills(warrior_selected)
+    fill_with_skills()
 
     add_click_event()
 }
@@ -327,8 +353,10 @@ function show_status(match_result) {
 
     let player_message = document.createElement("p")
     let enemy_message = document.createElement("p")
-    let text_player_attack = translate_attack(player_attack, player_attacks)
-    let text_enemy_attack = translate_attack(enemy_attack, enemy_attacks)
+    let text_player_attack = translate_attack(player_attack,
+        player_character.attacks_skills)
+    let text_enemy_attack = translate_attack(enemy_attack,
+        enemy_character.attacks_skills)
     let text_match_result = translate_result(match_result)
 
     update_health_points()
@@ -356,7 +384,8 @@ function attack(event) {
     let match_result = 0
     // Buscar em la lista de skills del personaje cuál es el valor del ataque.
     let attack_id = event.currentTarget.id.slice(4)
-    player_attack = player_attacks.find(skill => skill.id === attack_id).value
+    player_attack = player_character.attacks_skills.find(
+        skill => skill.id === attack_id).value
 
     if (div_messages.style.display == "none") {
         div_messages.style.display = "flex"
@@ -381,6 +410,15 @@ function reset_game() {
     // window.location.reload() recarga la página devolviendo el html 
     // original.
     location.reload()
+}
+
+
+function move_player() {
+    /* 
+        DESCRIPTION: Mueve el jugador por el canvas.
+    */
+
+
 }
 
 
@@ -417,9 +455,11 @@ function init() {
     // Inicializar los botones del juego.
     btn_select.addEventListener("click", select_warrior)
     btn_reset.addEventListener("click", reset_game)
+    btn_move.addEventListener("click", move_player)
 
     // Inicializar las secciones del juego.
     p_warning_message.style.display = "none"
+    sec_view_map.style.display = "none"
     sec_attack_selection_selection.style.display = "none"
     sec_combat.style.display = "none"
     div_messages.style.display = "none"
