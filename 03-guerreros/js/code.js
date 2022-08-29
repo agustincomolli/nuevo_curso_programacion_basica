@@ -54,8 +54,6 @@ const mapa = document.getElementById("map")
 // Declarar variables de uso general.
 let user_characters = []    // Contendrá los personajes a elegir.
 let enemy_characters = []   // Contendrá los enemigos a elegir.
-let player_attacks = []     // Secuencia de ataques del jugador.
-let enemy_attacks = []      // Secuencia de ataques del enemigo.
 let player_character = null
 let enemy_character = null
 let player_attack = 0
@@ -158,8 +156,6 @@ function select_enemy() {
     enemy_health = enemy_character.health
 
     spn_enemy.innerHTML = enemy_name
-    // Crear una lista con todos los ataques del enemigo.
-    enemy_attacks = enemy_character.attacks_skills
 }
 
 
@@ -183,6 +179,21 @@ function fill_with_skills() {
         </button>
         `
         div_attack_buttons.innerHTML += skill_button
+    })
+}
+
+
+function disable_buttons() {
+    /* 
+       DESCRIPTION: Deshabilita los botones de ataque.
+   */
+
+    let attack_buttons = []
+    // Crear una lista con todos los botones de ataque creados.
+    attack_buttons = document.querySelectorAll(".attack-button")
+
+    attack_buttons.forEach((button) => {
+        button.disabled = true
     })
 }
 
@@ -253,7 +264,7 @@ function select_warrior() {
 }
 
 
-function lets_combat(player, enemy) {
+function lets_combat(player_attack, enemy_attack) {
     /* 
         DESCRIPTION: Devuelve un entero con el resultado del juego.
                      Si es 0 es empate, si es 1 gana player y si
@@ -265,17 +276,17 @@ function lets_combat(player, enemy) {
     */
     let result = 0
 
-    if (player == enemy) {
+    if (player_attack == enemy_attack) {
         result = 0
-    } else if (player == 1 && enemy == 3) {
+    } else if (player_attack == 1 && enemy_attack == 3) {
         // 🪨 vs ✂️
         result = 1
         enemy_health -= 1 // Resto un punto de vida al enemigo.
-    } else if (player == 2 && enemy == 1) {
+    } else if (player_attack == 2 && enemy_attack == 1) {
         // 🧻 vs 🪨
         result = 1
         enemy_health -= 1 // Resto un punto de vida al enemigo.
-    } else if (player == 3 && enemy == 2) {
+    } else if (player_attack == 3 && enemy_attack == 2) {
         // ✂️ vs 🧻
         result = 1
         enemy_health -= 1 // Resto un punto de vida al enemigo.
@@ -338,9 +349,8 @@ function check_health() {
 
 
     // Deshabilitar botones de ataque.
-    attack_buttons.forEach((button) => {
-        button.disabled = true
-    })
+    disable_buttons()
+
     // Mostrar el botón reiniciar.
     btn_reset.style.display = "block"
 }
