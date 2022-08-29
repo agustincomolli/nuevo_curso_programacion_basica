@@ -59,6 +59,7 @@ let enemy_health = 3
 let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
 let archer = new Character("archer", "Arquero", "./images/archer.png", 3)
 let mage = new Character("mage", "Mago", "./images/mage.png", 3)
+let rogue = new Character("rogue", "Pícaro", "./images/rogue.png", 3)
 
 // Declarar los objetos que contendrán los enemigos.
 let skeleton_soldier = new Character("skeleton_soldier", "Esqueleto soldado",
@@ -293,11 +294,11 @@ function translate_attack(attack_number) {
     let selected_attack = ""
 
     if (attack_number == 1) {
-        selected_attack = "tierra 🍃"
+        selected_attack = "piedra 🪨"
     } else if (attack_number == 2) {
-        selected_attack = "agua 💧"
+        selected_attack = "papel 🧻"
     } else {
-        selected_attack = "fuego 🔥"
+        selected_attack = "tijera ✂️"
     }
     return selected_attack
 }
@@ -512,12 +513,33 @@ mage.attacks_skills.push(
     },
 )
 
+rogue.attacks_skills.push(
+    {
+        id: "power_strike",
+        image: "./images/power_strike.png",
+        value: 1,
+        description: "Golpe de poder" //🍃
+    },
+    {
+        id: "confusion",
+        image: "./images/confusion.png",
+        value: 2,
+        description: "Confusión"//💧
+    },
+    {
+        id: "poison",
+        image: "./images/poison.png",
+        value: 3,
+        description: "Envenenar" // 🔥
+    },
+)
+
 // Los enemigos tendrán las mismas skills que los personajes a elegir.
 skeleton_soldier.attacks_skills = knight.attacks_skills
 skeleton_archer.attacks_skills = archer.attacks_skills
 skeleton_mage.attacks_skills = mage.attacks_skills
 
 // Agregar todos los objetos character a la lista.
-user_characters.push(knight, archer, mage)
+user_characters.push(knight, archer, mage, rogue)
 // ... y todos los enemigos.
 enemy_characters.push(skeleton_soldier, skeleton_archer, skeleton_mage)
