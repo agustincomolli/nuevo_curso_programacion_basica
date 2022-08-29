@@ -130,17 +130,7 @@ function select_enemy() {
     enemy_health = enemy_characters[enemy_number].health
 
     spn_enemy.innerHTML = enemy_name
-}
-
-
-function generate_enemy_attacks() {
-    /* 
-        DESCRIPTION: Crear una lista con todos los ataques del enemigo.
-    */
-
-    let enemy_name = ""
-
-    enemy_name = spn_enemy.innerHTML
+    // Crear una lista con todos los ataques del enemigo.
     enemy_attacks = enemy_characters.find(character => character.name ===
         enemy_name).attacks_skills
 }
@@ -251,13 +241,16 @@ function lets_combat(player, enemy) {
 
     if (player == enemy) {
         result = 0
-    } else if (player == 1 && enemy == 2) {
+    } else if (player == 1 && enemy == 3) {
+        // 🪨 vs ✂️
         result = 1
         enemy_health -= 1 // Resto un punto de vida al enemigo.
-    } else if (player == 2 && enemy == 3) {
+    } else if (player == 2 && enemy == 1) {
+        // 🧻 vs 🪨
         result = 1
         enemy_health -= 1 // Resto un punto de vida al enemigo.
-    } else if (player == 3 && enemy == 1) {
+    } else if (player == 3 && enemy == 2) {
+        // ✂️ vs 🧻
         result = 1
         enemy_health -= 1 // Resto un punto de vida al enemigo.
     } else {
@@ -286,20 +279,13 @@ function translate_result(match_result) {
 }
 
 
-function translate_attack(attack_number) {
+function translate_attack(attack_number, attack_list) {
     /* 
         DESCRIPTION: Devuelve el nombre del ataque según se su número.
     */
 
-    let selected_attack = ""
+    let selected_attack = attack_list.find(skill => skill.value === attack_number).description
 
-    if (attack_number == 1) {
-        selected_attack = "piedra 🪨"
-    } else if (attack_number == 2) {
-        selected_attack = "papel 🧻"
-    } else {
-        selected_attack = "tijera ✂️"
-    }
     return selected_attack
 }
 
@@ -341,8 +327,8 @@ function show_status(match_result) {
 
     let player_message = document.createElement("p")
     let enemy_message = document.createElement("p")
-    let text_player_attack = translate_attack(player_attack)
-    let text_enemy_attack = translate_attack(enemy_attack)
+    let text_player_attack = translate_attack(player_attack, player_attacks)
+    let text_enemy_attack = translate_attack(enemy_attack, enemy_attacks)
     let text_match_result = translate_result(match_result)
 
     update_health_points()
@@ -370,9 +356,7 @@ function attack(event) {
     let match_result = 0
     // Buscar em la lista de skills del personaje cuál es el valor del ataque.
     let attack_id = event.currentTarget.id.slice(4)
-    player_skills = user_characters.find(character => character.name ===
-        spn_player.innerHTML).attacks_skills
-    player_attack = player_skills.find(skill => skill.id === attack_id).value
+    player_attack = player_attacks.find(skill => skill.id === attack_id).value
 
     if (div_messages.style.display == "none") {
         div_messages.style.display = "flex"
