@@ -235,8 +235,9 @@ input:checked + label {
     margin-block-start: 0.5em;
 }
 
-#map {
+#can-map {
     border: 2px solid #DCD7C9;
+    margin-bottom: 10px;
 }
 
 #sec-attack-selection {

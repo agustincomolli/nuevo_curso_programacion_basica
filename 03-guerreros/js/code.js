@@ -13,6 +13,8 @@ class Character {
         this.y = 30
         this.width = 80
         this.height = 80
+        this.img_in_map = new Image()
+        this.img_in_map.src = this.image
     }
 }
 
@@ -45,11 +47,9 @@ const spn_enemy_health = document.getElementById("spn-enemy_health")
 const spn_player = document.getElementById("spn-player")
 const spn_enemy = document.getElementById("spn-enemy")
 
-const player = document.getElementById("spn-player").innerHTML
-const player_image = document.getElementById("player-image")
-const enemy = document.getElementById("spn-enemy").innerHTML
-const enemy_image = document.getElementById("enemy-image")
-const mapa = document.getElementById("map")
+const img_player = document.getElementById("img-player")
+const img_enemy = document.getElementById("img-enemy")
+const can_map = document.getElementById("can-map")
 
 // Declarar variables de uso general.
 let user_characters = []    // Contendrá los personajes a elegir.
@@ -75,7 +75,7 @@ let skeleton_mage = new Character("skeleton_mage", "Esqueleto mago",
 let orc = new Character("orc", "Orco", "./images/orc.png", 4)
 let troll = new Character("troll", "Troll", "./images/troll.png", 5)
 
-let canvas = map.getContext("2d")
+let game_map = can_map.getContext("2d")
 
 
 function get_random_number(min, max) {
@@ -119,23 +119,6 @@ function update_health_points() {
     spn_enemy_health.innerHTML = "💚".repeat(enemy_character.health)
 }
 
-
-function draw_player() {
-    /* 
-        DESCRIPTION: Actualiza los puntos de vida de los combatientes.
-    */
-
-    let player_selected = user_characters.find(character => character.name ===
-        spn_player)
-    canvas.drawImage(
-        player_selected.image,
-        player_selected.x,
-        player_selected.y,
-        player_selected.width,
-        player_selected.height
-    )
-}
-
 function select_enemy() {
     /* 
         DESCRIPTION: Selecciona un enemigo de forma aleatoria.
@@ -147,8 +130,8 @@ function select_enemy() {
 
     enemy_character = enemy_characters[enemy_number]
 
-    enemy_image.src = enemy_character.image
-    enemy_image.alt = enemy_character.name
+    img_enemy.src = enemy_character.image
+    img_enemy.alt = enemy_character.name
 
     spn_enemy.innerHTML = enemy_character.name
 }
@@ -233,19 +216,19 @@ function select_warrior() {
     // user_character el personaje que coincida con el elegido por el usuario.
     player_character = user_characters.find(character => character.name ===
         warrior_selected)
-    player_image.src = player_character.image
-    player_image.alt = player_character.name
+    img_player.src = player_character.image
+    img_player.alt = player_character.name
 
     // Mostrar el jugador elegido.
     spn_player.innerHTML = player_character.name
     // Ocultar la sección de selección de jugador
     sec_player_selection.style.display = "none"
     // Mostrar la sección del mapa.
-    // sec_view_map.style.display = "flex"
+    sec_view_map.style.display = "flex"
 
     // Mostrar las secciones de ataque y mensajes.
-    sec_attack_selection.style.display = "flex"
-    sec_combat.style.display = "grid"
+    //    sec_attack_selection.style.display = "flex"
+    //    sec_combat.style.display = "grid"
     select_enemy()
 
     update_health_points()
@@ -328,13 +311,13 @@ function check_health() {
     if (enemy_character.health == 0) {
         p_result.innerHTML = "🥳 ¡Ganaste! 🏆"
         spn_enemy_health.innerHTML = "👻"
-        enemy_image.src = "./images/tomb.png"
+        img_enemy.src = "./images/tomb.png"
         // Voltear imagen horizontalmente.
-        enemy_image.style.transform = "scaleX(-1)"
+        img_enemy.style.transform = "scaleX(-1)"
     } else if (player_character.health == 0) {
         p_result.innerHTML = "😭 ¡Perdiste! 🥀"
         spn_player_health.innerHTML = "👻"
-        player_image.src = "./images/tomb.png"
+        img_player.src = "./images/tomb.png"
     } else {
         return
     }
@@ -419,12 +402,58 @@ function reset_game() {
 }
 
 
-function move_player() {
+function draw_player() {
     /* 
-        DESCRIPTION: Mueve el jugador por el canvas.
+        DESCRIPTION: Dibuja al personaje seleccionado en el mapa.
     */
 
+    game_map.clearRect(0, 0, can_map.width, can_map.height)
+    game_map.drawImage(
+        player_character.img_in_map,
+        player_character.x,
+        player_character.y,
+        player_character.width,
+        player_character.height
+    )
+}
 
+
+function move_player(event) {
+    /* 
+        DESCRIPTION: Mueve el jugador por el mapa.
+    */
+
+    const keys = {
+        LEFT: 37,  // Flecha izquierda
+        UP: 38,    // Flecha arriba
+        RIGHT: 39, // Flecha abajo
+        DOWN: 40   // Flecha derecha
+    }
+
+    let x = player_character.x
+    let y = player_character.y
+    let width = player_character.width
+    let height = player_character.height
+
+    if (event.keyCode == keys.LEFT && x > 0) {
+        x -= 5
+    }
+    else if (event.keyCode == keys.RIGHT && x <
+        (can_map.clientWidth - width)) {
+        x += 5
+    }
+    else if (event.keyCode == keys.UP && y > 0) {
+        y -= 5
+    }
+    else if (event.keyCode == keys.DOWN && y <
+        (can_map.clientHeight - height)) {
+        y += 5
+    }
+
+    player_character.x = x
+    player_character.y = y
+
+    draw_player()
 }
 
 
@@ -551,9 +580,9 @@ function add_enemy_skills() {
                      personajes a elegir.
     */
 
-skeleton_soldier.attacks_skills = knight.attacks_skills
-skeleton_archer.attacks_skills = archer.attacks_skills
-skeleton_mage.attacks_skills = mage.attacks_skills
+    skeleton_soldier.attacks_skills = knight.attacks_skills
+    skeleton_archer.attacks_skills = archer.attacks_skills
+    skeleton_mage.attacks_skills = mage.attacks_skills
 }
 
 
@@ -562,10 +591,13 @@ function init() {
         DESCRIPTION: Inicializa los elementos del html.
     */
 
-    // Inicializar los botones del juego.
+    // Agregar manejadores de eventos en los botones del juego.
     btn_select.addEventListener("click", select_warrior)
     btn_reset.addEventListener("click", reset_game)
     btn_move.addEventListener("click", move_player)
+
+    // Agregar manejador de eventos para el mapa.
+    document.addEventListener("keydown", move_player)
 
     // Inicializar las secciones del juego.
     p_warning_message.style.display = "none"
