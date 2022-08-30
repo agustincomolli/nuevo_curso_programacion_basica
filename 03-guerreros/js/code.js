@@ -58,8 +58,6 @@ let player_character = null
 let enemy_character = null
 let player_attack = 0
 let enemy_attack = 0
-let player_health = 3
-let enemy_health = 3
 
 // Declarar objetos que contendrán los personajes a elegir.
 let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
@@ -117,8 +115,8 @@ function update_health_points() {
     /* 
         DESCRIPTION: Actualiza los puntos de vida de los combatientes.
     */
-    spn_player_health.innerHTML = "❤️".repeat(player_health)
-    spn_enemy_health.innerHTML = "💚".repeat(enemy_health)
+    spn_player_health.innerHTML = "❤️".repeat(player_character.health)
+    spn_enemy_health.innerHTML = "💚".repeat(enemy_character.health)
 }
 
 
@@ -146,16 +144,13 @@ function select_enemy() {
     // Generar un número entre 1 y la cantidad de objetos en la lista enemy_characters
     // que representará a un enemigo a elegir.
     let enemy_number = get_random_number(0, enemy_characters.length - 1)
-    let enemy_name = ""
 
     enemy_character = enemy_characters[enemy_number]
 
-    enemy_name = enemy_character.name
     enemy_image.src = enemy_character.image
     enemy_image.alt = enemy_character.name
-    enemy_health = enemy_character.health
 
-    spn_enemy.innerHTML = enemy_name
+    spn_enemy.innerHTML = enemy_character.name
 }
 
 
@@ -241,9 +236,6 @@ function select_warrior() {
     player_image.src = player_character.image
     player_image.alt = player_character.name
 
-    // Obtener la cantidad de vida del personaje elegido.
-    player_health = player_character.health
-
     // Mostrar el jugador elegido.
     spn_player.innerHTML = player_character.name
     // Ocultar la sección de selección de jugador
@@ -281,18 +273,18 @@ function lets_combat(player_attack, enemy_attack) {
     } else if (player_attack == 1 && enemy_attack == 3) {
         // 🪨 vs ✂️
         result = 1
-        enemy_health -= 1 // Resto un punto de vida al enemigo.
+        enemy_character.health -= 1 // Resto un punto de vida al enemigo.
     } else if (player_attack == 2 && enemy_attack == 1) {
         // 🧻 vs 🪨
         result = 1
-        enemy_health -= 1 // Resto un punto de vida al enemigo.
+        enemy_character.health -= 1 // Resto un punto de vida al enemigo.
     } else if (player_attack == 3 && enemy_attack == 2) {
         // ✂️ vs 🧻
         result = 1
-        enemy_health -= 1 // Resto un punto de vida al enemigo.
+        enemy_character.health -= 1 // Resto un punto de vida al enemigo.
     } else {
         result = 2
-        player_health -= 1 // Resto un punto de vida al jugador.
+        player_character.health -= 1 // Resto un punto de vida al jugador.
     }
 
     return result
@@ -333,12 +325,16 @@ function check_health() {
         en 0 lo que determinará quién ganó el juego.
     */
 
-    if (enemy_health == 0) {
+    if (enemy_character.health == 0) {
         p_result.innerHTML = "🥳 ¡Ganaste! 🏆"
-        spn_enemy_health.innerHTML = "☠️"
-    } else if (player_health == 0) {
+        spn_enemy_health.innerHTML = "👻"
+        enemy_image.src = "./images/tomb.png"
+        // Voltear imagen horizontalmente.
+        enemy_image.style.transform = "scaleX(-1)"
+    } else if (player_character.health == 0) {
         p_result.innerHTML = "😭 ¡Perdiste! 🥀"
-        spn_player_health.innerHTML = "☠️"
+        spn_player_health.innerHTML = "👻"
+        player_image.src = "./images/tomb.png"
     } else {
         return
     }
@@ -457,6 +453,110 @@ function fill_with_characters() {
 }
 
 
+function add_player_skills() {
+    /* 
+        DESCRIPTION: Agregar habilidades de ataque a cada personaje.
+    */
+
+    knight.attacks_skills.push(
+        {
+            id: "power_strike",
+            image: "./images/power_strike.png",
+            value: 1,
+            description: "Golpe de poder" //🍃
+        },
+        {
+            id: "retaliation",
+            image: "./images/retaliation.png",
+            value: 2,
+            description: "Represalias"//💧
+        },
+        {
+            id: "sword_storm",
+            image: "./images/sword_storm.png",
+            value: 3,
+            description: "Tormenta de espadas" // 🔥
+        }
+    )
+
+    archer.attacks_skills.push(
+        {
+            id: "simple-shot",
+            image: "./images/simple-shot.png",
+            value: 1,
+            description: "Tiro simple" //🍃
+        },
+        {
+            id: "headshot",
+            image: "./images/headshot.png",
+            value: 2,
+            description: "Tiro en la cabeza"//💧
+        },
+        {
+            id: "fire_arrow",
+            image: "./images/fire_arrow.png",
+            value: 3,
+            description: "Flecha de fuego" // 🔥
+        },
+    )
+
+    mage.attacks_skills.push(
+        {
+            id: "lightning_bolts",
+            image: "./images/lightning_bolts.png",
+            value: 1,
+            description: "Relámpagos" //🍃
+        },
+        {
+            id: "tsunami",
+            image: "./images/tsunami.png",
+            value: 2,
+            description: "Tsunami"//💧
+        },
+        {
+            id: "fireball",
+            image: "./images/fireball.png",
+            value: 3,
+            description: "Bola de fuego" // 🔥
+        },
+    )
+
+    rogue.attacks_skills.push(
+        {
+            id: "power_strike",
+            image: "./images/power_strike.png",
+            value: 1,
+            description: "Golpe de poder" //🍃
+        },
+        {
+            id: "confusion",
+            image: "./images/confusion.png",
+            value: 2,
+            description: "Confusión"//💧
+        },
+        {
+            id: "poison",
+            image: "./images/poison.png",
+            value: 3,
+            description: "Envenenar" // 🔥
+        },
+    )
+}
+
+
+function add_enemy_skills() {
+    /* 
+        DESCRIPTION: Agregar habilidades de ataque a cada personaje.
+                     Los enemigos tendrán las mismas skills que los 
+                     personajes a elegir.
+    */
+
+skeleton_soldier.attacks_skills = knight.attacks_skills
+skeleton_archer.attacks_skills = archer.attacks_skills
+skeleton_mage.attacks_skills = mage.attacks_skills
+}
+
+
 function init() {
     /* 
         DESCRIPTION: Inicializa los elementos del html.
@@ -483,95 +583,9 @@ function init() {
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
 
-// Agregar habilidades de ataque a cada personaje.
-knight.attacks_skills.push(
-    {
-        id: "power_strike",
-        image: "./images/power_strike.png",
-        value: 1,
-        description: "Golpe de poder" //🍃
-    },
-    {
-        id: "retaliation",
-        image: "./images/retaliation.png",
-        value: 2,
-        description: "Represalias"//💧
-    },
-    {
-        id: "sword_storm",
-        image: "./images/sword_storm.png",
-        value: 3,
-        description: "Tormenta de espadas" // 🔥
-    },
-)
+add_player_skills()
+add_enemy_skills()
 
-archer.attacks_skills.push(
-    {
-        id: "simple-shot",
-        image: "./images/simple-shot.png",
-        value: 1,
-        description: "Tiro simple" //🍃
-    },
-    {
-        id: "headshot",
-        image: "./images/headshot.png",
-        value: 2,
-        description: "Tiro en la cabeza"//💧
-    },
-    {
-        id: "fire_arrow",
-        image: "./images/fire_arrow.png",
-        value: 3,
-        description: "Flecha de fuego" // 🔥
-    },
-)
-
-mage.attacks_skills.push(
-    {
-        id: "lightning_bolts",
-        image: "./images/lightning_bolts.png",
-        value: 1,
-        description: "Relámpagos" //🍃
-    },
-    {
-        id: "tsunami",
-        image: "./images/tsunami.png",
-        value: 2,
-        description: "Tsunami"//💧
-    },
-    {
-        id: "fireball",
-        image: "./images/fireball.png",
-        value: 3,
-        description: "Bola de fuego" // 🔥
-    },
-)
-
-rogue.attacks_skills.push(
-    {
-        id: "power_strike",
-        image: "./images/power_strike.png",
-        value: 1,
-        description: "Golpe de poder" //🍃
-    },
-    {
-        id: "confusion",
-        image: "./images/confusion.png",
-        value: 2,
-        description: "Confusión"//💧
-    },
-    {
-        id: "poison",
-        image: "./images/poison.png",
-        value: 3,
-        description: "Envenenar" // 🔥
-    },
-)
-
-// Los enemigos tendrán las mismas skills que los personajes a elegir.
-skeleton_soldier.attacks_skills = knight.attacks_skills
-skeleton_archer.attacks_skills = archer.attacks_skills
-skeleton_mage.attacks_skills = mage.attacks_skills
 
 // Agregar todos los objetos character a la lista.
 user_characters.push(knight, archer, mage, rogue)
