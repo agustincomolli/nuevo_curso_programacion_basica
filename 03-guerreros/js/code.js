@@ -15,6 +15,8 @@ class Character {
         this.height = 80
         this.img_in_map = new Image()
         this.img_in_map.src = this.image
+        this.speed_x = 0
+        this.speed_y = 0
     }
 }
 
@@ -191,6 +193,101 @@ function add_click_event() {
 }
 
 
+function draw_player() {
+    /* 
+        DESCRIPTION: Dibuja al personaje seleccionado en el mapa.
+    */
+
+    player_character.x += player_character.speed_x
+    player_character.y += player_character.speed_y
+    game_map.clearRect(0, 0, can_map.width, can_map.height)
+    game_map.drawImage(
+        player_character.img_in_map,
+        player_character.x,
+        player_character.y,
+        player_character.width,
+        player_character.height
+    )
+}
+
+
+function stop_moving() {
+    /* 
+        DESCRIPTION: Establece la velocidad sobre el eje Y y X en 0 para dejar de moverse.
+    */
+
+    player_character.speed_x = 0
+    player_character.speed_y = 0
+}
+
+
+function move_up() {
+    /* 
+        DESCRIPTION: Establece la velocidad sobre el eje Y.
+    */
+
+    player_character.speed_y = -5
+}
+
+
+function move_right() {
+    /* 
+        DESCRIPTION: Establece la velocidad sobre el eje X.
+    */
+
+    player_character.speed_x = 5
+}
+
+
+function move_down() {
+    /* 
+        DESCRIPTION: Establece la velocidad sobre el eje Y.
+    */
+
+    player_character.speed_y = 5
+}
+
+
+function move_left() {
+    /* 
+        DESCRIPTION: Establece la velocidad sobre el eje X.
+    */
+
+    player_character.speed_x = -5
+}
+
+
+function check_key_pressed(event) {
+    /* 
+        DESCRIPTION: Mueve el jugador por el mapa.
+    */
+
+    if (event.key == "ArrowUp") {
+        move_up()
+    } else if (event.key == "ArrowRight") {
+        move_right()
+    } else if (event.key == "ArrowDown") {
+        move_down()
+    } else if (event.key == "ArrowLeft") {
+        move_left()
+    }
+}
+
+
+function initialize_map() {
+    /* 
+       DESCRIPTION: Agrega los eventListener para mover al personaje 
+                    por el mapa.
+   */
+
+    let interval = setInterval(draw_player, 50)
+
+    // Agregar manejador de eventos para el mapa.
+    document.addEventListener("keydown", check_key_pressed)
+    document.addEventListener("keyup", stop_moving)
+}
+
+
 function select_warrior() {
     /* 
         DESCRIPTION: Selecciona el personaje del jugador.
@@ -225,6 +322,7 @@ function select_warrior() {
     sec_player_selection.style.display = "none"
     // Mostrar la sección del mapa.
     sec_view_map.style.display = "flex"
+    initialize_map()
 
     // Mostrar las secciones de ataque y mensajes.
     //    sec_attack_selection.style.display = "flex"
@@ -402,61 +500,6 @@ function reset_game() {
 }
 
 
-function draw_player() {
-    /* 
-        DESCRIPTION: Dibuja al personaje seleccionado en el mapa.
-    */
-
-    game_map.clearRect(0, 0, can_map.width, can_map.height)
-    game_map.drawImage(
-        player_character.img_in_map,
-        player_character.x,
-        player_character.y,
-        player_character.width,
-        player_character.height
-    )
-}
-
-
-function move_player(event) {
-    /* 
-        DESCRIPTION: Mueve el jugador por el mapa.
-    */
-
-    const keys = {
-        LEFT: 37,  // Flecha izquierda
-        UP: 38,    // Flecha arriba
-        RIGHT: 39, // Flecha abajo
-        DOWN: 40   // Flecha derecha
-    }
-
-    let x = player_character.x
-    let y = player_character.y
-    let width = player_character.width
-    let height = player_character.height
-
-    if (event.keyCode == keys.LEFT && x > 0) {
-        x -= 5
-    }
-    else if (event.keyCode == keys.RIGHT && x <
-        (can_map.clientWidth - width)) {
-        x += 5
-    }
-    else if (event.keyCode == keys.UP && y > 0) {
-        y -= 5
-    }
-    else if (event.keyCode == keys.DOWN && y <
-        (can_map.clientHeight - height)) {
-        y += 5
-    }
-
-    player_character.x = x
-    player_character.y = y
-
-    draw_player()
-}
-
-
 function fill_with_characters() {
     /* 
         DESCRIPTION: Llena la página HTML con los personajes elegibles
@@ -594,10 +637,6 @@ function init() {
     // Agregar manejadores de eventos en los botones del juego.
     btn_select.addEventListener("click", select_warrior)
     btn_reset.addEventListener("click", reset_game)
-    btn_move.addEventListener("click", move_player)
-
-    // Agregar manejador de eventos para el mapa.
-    document.addEventListener("keydown", move_player)
 
     // Inicializar las secciones del juego.
     p_warning_message.style.display = "none"
