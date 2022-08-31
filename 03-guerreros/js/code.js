@@ -282,6 +282,8 @@ function initialize_map() {
 
     let interval = setInterval(draw_player, 50)
 
+    can_map.width = 800
+    can_map.height = 600
     // Agregar manejador de eventos para el mapa.
     document.addEventListener("keydown", check_key_pressed)
     document.addEventListener("keyup", stop_moving)
