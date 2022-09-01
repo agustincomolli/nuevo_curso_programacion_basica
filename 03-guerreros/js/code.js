@@ -130,32 +130,6 @@ function randomize_list(list = []) {
 }
 
 
-function update_health_points() {
-    /* 
-        DESCRIPTION: Actualiza los puntos de vida de los combatientes.
-    */
-    spn_player_health.innerHTML = "❤️".repeat(player_character.health)
-    spn_enemy_health.innerHTML = "💚".repeat(enemy_character.health)
-}
-
-function select_enemy() {
-    /* 
-        DESCRIPTION: Selecciona un enemigo de forma aleatoria.
-    */
-
-    // Generar un número entre 1 y la cantidad de objetos en la lista enemy_characters
-    // que representará a un enemigo a elegir.
-    let enemy_number = get_random_number(0, enemy_characters.length - 1)
-
-    enemy_character = enemy_characters[enemy_number]
-
-    img_enemy.src = enemy_character.image
-    img_enemy.alt = enemy_character.name
-
-    spn_enemy.innerHTML = enemy_character.name
-}
-
-
 function fill_with_skills() {
     /* 
         DESCRIPTION: Crear los botones que se usarán para realizar ataques.
@@ -177,6 +151,32 @@ function fill_with_skills() {
         `
         div_attack_buttons.innerHTML += skill_button
     })
+}
+
+
+function update_health_points() {
+    /* 
+        DESCRIPTION: Actualiza los puntos de vida de los combatientes.
+    */
+    spn_player_health.innerHTML = "❤️".repeat(player_character.health)
+    spn_enemy_health.innerHTML = "💚".repeat(enemy_character.health)
+}
+
+function select_enemy(enemy) {
+    /* 
+        DESCRIPTION: Selecciona un enemigo de forma aleatoria.
+    */
+
+    // Generar un número entre 1 y la cantidad de objetos en la lista enemy_characters
+    // que representará a un enemigo a elegir.
+    //let enemy_number = get_random_number(0, enemy_characters.length - 1)
+
+    enemy_character = enemy
+
+    img_enemy.src = enemy_character.image
+    img_enemy.alt = enemy_character.name
+
+    spn_enemy.innerHTML = enemy_character.name
 }
 
 
@@ -233,8 +233,23 @@ function detect_colision(player, enemy) {
     ) {
         return
     }
+
     stop_moving()
-    alert("Hay colisión con " + enemy.name)
+
+    // Ocultar sección de mapa.
+    sec_view_map.style.display = "none"
+    
+    // Mostrar las secciones de ataque y mensajes.
+    sec_attack_selection.style.display = "flex"
+    sec_combat.style.display = "grid"
+
+    select_enemy(enemy)
+
+    update_health_points()
+
+    fill_with_skills()
+
+    add_click_event()
 }
 
 
@@ -384,16 +399,6 @@ function select_warrior() {
     sec_view_map.style.display = "flex"
     initialize_map()
 
-    // Mostrar las secciones de ataque y mensajes.
-    //    sec_attack_selection.style.display = "flex"
-    //    sec_combat.style.display = "grid"
-    select_enemy()
-
-    update_health_points()
-
-    fill_with_skills()
-
-    add_click_event()
 }
 
 
