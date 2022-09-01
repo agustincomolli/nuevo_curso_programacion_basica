@@ -3,20 +3,36 @@ class Character {
                     como los personajes enemigos.
     */
 
-    constructor(id, name, image, health) {
+    constructor(id, name, image, health, x = 295, y = 415) {
         this.id = id
         this.name = name
         this.image = image
         this.health = health
         this.attacks_skills = []
-        this.x = 20
-        this.y = 30
-        this.width = 80
-        this.height = 80
+        this.x = x
+        this.y = y
+        this.width = 60
+        this.height = 60
         this.img_in_map = new Image()
         this.img_in_map.src = this.image
         this.speed_x = 0
         this.speed_y = 0
+    }
+
+
+    draw_character(canvas) {
+        /* 
+            DESCRIPTION: Dibuja el objeto en el canvas.
+            PARAMETERS:
+                        canvas = es el lienzo donde se va a dibujar.
+        */
+        canvas.drawImage(
+            this.img_in_map,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+        )
     }
 }
 
@@ -68,16 +84,17 @@ let mage = new Character("mage", "Mago", "./images/mage.png", 3)
 let rogue = new Character("rogue", "Pícaro", "./images/rogue.png", 3)
 
 // Declarar los objetos que contendrán los enemigos.
-let skeleton_soldier = new Character("skeleton_soldier", "Esqueleto soldado",
-    "./images/skeleton_soldier.png", 3)
-let skeleton_archer = new Character("skeleton_archer", "Esqueleto arquero",
-    "./images/skeleton_archer.png", 3)
-let skeleton_mage = new Character("skeleton_mage", "Esqueleto mago",
-    "./images/skeleton_mage.png", 3)
+let skeleton_soldier = new Character("skeleton_soldier", "Esqueleto Ssoldado",
+    "./images/skeleton_soldier.png", 3, 475, 165)
+let skeleton_archer = new Character("skeleton_archer", "Esqueleto Arquero",
+    "./images/skeleton_archer.png", 3, 110, 195)
+let skeleton_mage = new Character("skeleton_mage", "Esqueleto Mago",
+    "./images/skeleton_mage.png", 3, 280, 85)
 let orc = new Character("orc", "Orco", "./images/orc.png", 4)
 let troll = new Character("troll", "Troll", "./images/troll.png", 5)
 
 let game_map = can_map.getContext("2d")
+let map_background = new Image()
 
 
 function get_random_number(min, max) {
@@ -193,7 +210,35 @@ function add_click_event() {
 }
 
 
-function draw_player() {
+function detect_colision(player, enemy) {
+    /* 
+        DESCRIPTION: Detecta si dos objetos se tocan.
+    */
+
+    const up_player = player.y + 25
+    const left_player = player.x + 25
+    const right_player = player.x + player.width - 25
+    const down_player = player.y + player.height - 25
+
+    const up_enemy = enemy.y
+    const left_enemy = enemy.x
+    const right_enemy = enemy.x + enemy.width
+    const down_enemy = enemy.y + enemy.height
+
+    if (
+        down_player < up_enemy ||
+        up_player > down_enemy ||
+        right_player < left_enemy ||
+        left_player > right_enemy
+    ) {
+        return
+    }
+    stop_moving()
+    alert("Hay colisión con " + enemy.name)
+}
+
+
+function draw_canvas() {
     /* 
         DESCRIPTION: Dibuja al personaje seleccionado en el mapa.
     */
@@ -201,13 +246,25 @@ function draw_player() {
     player_character.x += player_character.speed_x
     player_character.y += player_character.speed_y
     game_map.clearRect(0, 0, can_map.width, can_map.height)
+    // Dibujar el mapa.
     game_map.drawImage(
-        player_character.img_in_map,
-        player_character.x,
-        player_character.y,
-        player_character.width,
-        player_character.height
+        map_background,
+        0,
+        0,
+        can_map.width,
+        can_map.height
     )
+    // Dibujar el personaje elegido.
+    player_character.draw_character(game_map)
+    // Dibujar a los enemigos.
+    enemy_characters.forEach(enemy => {
+        enemy.draw_character(game_map)
+        // Detectar si se produce una colisión.
+        if (player_character.speed_x !== 0 || player_character.speed_y !== 0) {
+            detect_colision(player_character, enemy)
+        }
+    })
+
 }
 
 
@@ -280,10 +337,11 @@ function initialize_map() {
                     por el mapa.
    */
 
-    let interval = setInterval(draw_player, 50)
+    let interval = setInterval(draw_canvas, 50)
 
-    can_map.width = 800
-    can_map.height = 600
+    can_map.width = 640
+    can_map.height = 480
+    map_background.src = "./images/map.png"
     // Agregar manejador de eventos para el mapa.
     document.addEventListener("keydown", check_key_pressed)
     document.addEventListener("keyup", stop_moving)
