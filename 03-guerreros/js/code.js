@@ -95,6 +95,7 @@ let troll = new Character("troll", "Troll", "./images/troll.png", 5)
 
 let game_map = can_map.getContext("2d")
 let map_background = new Image()
+let interval = null
 
 
 function get_random_number(min, max) {
@@ -162,21 +163,34 @@ function update_health_points() {
     spn_enemy_health.innerHTML = "💚".repeat(enemy_character.health)
 }
 
-function select_enemy(enemy) {
+function show_combat_section() {
     /* 
-        DESCRIPTION: Selecciona un enemigo de forma aleatoria.
+        DESCRIPTION: Muestra la sección de combate con la info de los oponentes.
     */
 
-    // Generar un número entre 1 y la cantidad de objetos en la lista enemy_characters
-    // que representará a un enemigo a elegir.
-    //let enemy_number = get_random_number(0, enemy_characters.length - 1)
-
-    enemy_character = enemy
-
+    // Mostrar información del enemigo.
     img_enemy.src = enemy_character.image
     img_enemy.alt = enemy_character.name
-
     spn_enemy.innerHTML = enemy_character.name
+
+    // Ocultar sección de mapa.
+    sec_view_map.style.display = "none"
+    // Quitar los EventListeners del mapa para evitar bugs.
+    interval = null
+    document.removeEventListener("keydown", check_key_pressed)
+    document.removeEventListener("keyup", stop_moving)
+
+
+    // Mostrar las secciones de ataque y mensajes.
+    sec_attack_selection.style.display = "flex"
+    sec_combat.style.display = "grid"
+
+    update_health_points()
+
+    fill_with_skills()
+
+    add_click_event()
+
 }
 
 
@@ -235,21 +249,29 @@ function detect_colision(player, enemy) {
     }
 
     stop_moving()
+    enemy_character = enemy
 
-    // Ocultar sección de mapa.
-    sec_view_map.style.display = "none"
-    
-    // Mostrar las secciones de ataque y mensajes.
-    sec_attack_selection.style.display = "flex"
-    sec_combat.style.display = "grid"
+    show_combat_section()
+}
 
-    select_enemy(enemy)
 
-    update_health_points()
+function is_in_border() {
+    /* 
+        DESCRIPTION: Detectar colisión del personaje con los bordes del canvas.
+    */
 
-    fill_with_skills()
-
-    add_click_event()
+    if (player_character.y + player_character.speed_y < 0) {
+        return true
+    }
+    if (player_character.y + player_character.speed_y > can_map.height - player_character.height) {
+        return true
+    }
+    if (player_character.x + player_character.speed_x < 0) {
+        return true
+    }
+    if (player_character.x + player_character.speed_x > can_map.width - player_character.width) {
+        return true
+    }
 }
 
 
@@ -258,9 +280,15 @@ function draw_canvas() {
         DESCRIPTION: Dibuja al personaje seleccionado en el mapa.
     */
 
+    if (is_in_border()) {
+        return
+    }
+
     player_character.x += player_character.speed_x
     player_character.y += player_character.speed_y
+
     game_map.clearRect(0, 0, can_map.width, can_map.height)
+
     // Dibujar el mapa.
     game_map.drawImage(
         map_background,
@@ -269,8 +297,10 @@ function draw_canvas() {
         can_map.width,
         can_map.height
     )
+
     // Dibujar el personaje elegido.
     player_character.draw_character(game_map)
+
     // Dibujar a los enemigos.
     enemy_characters.forEach(enemy => {
         enemy.draw_character(game_map)
@@ -352,7 +382,7 @@ function initialize_map() {
                     por el mapa.
    */
 
-    let interval = setInterval(draw_canvas, 50)
+    interval = setInterval(draw_canvas, 50)
 
     can_map.width = 640
     can_map.height = 480
