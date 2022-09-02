@@ -175,8 +175,9 @@ function show_combat_section() {
 
     // Ocultar sección de mapa.
     sec_view_map.style.display = "none"
+    // Detener el intervalo de refresco.
+    clearInterval(interval)
     // Quitar los EventListeners del mapa para evitar bugs.
-    interval = null
     document.removeEventListener("keydown", check_key_pressed)
     document.removeEventListener("keyup", stop_moving)
 
