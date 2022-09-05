@@ -9,7 +9,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
 html body {
-height: 97.5vh;
+    height: 97.5vh;
 }
 
 body {
@@ -25,14 +25,15 @@ body {
 .grid-layout {
     display: grid;
     grid-template-areas: "header"
-                         "player-selection"
-                         "map"
-                         "attack-selection"
-                         "combat"
-                         "footer";
+        "player-selection"
+        "map"
+        "attack-selection"
+        "combat"
+        "footer";
     grid-template-rows: 65px auto auto auto 1fr;
     height: 97vh;
-    padding: 0px 20px; /* arriba y abajo 0px; izquierda y derecha 20px */
+    padding: 0px 20px;
+    /* arriba y abajo 0px; izquierda y derecha 20px */
 }
 
 .header {
@@ -55,7 +56,7 @@ body {
     grid-area: combat;
     display: grid;
     grid-template-areas: "player messages messages enemy"
-                         "player attack-messages attack-messages enemy";
+        "player attack-messages attack-messages enemy";
     grid-template-columns: 200px auto auto 200px;
     grid-template-rows: 110px auto;
 }
@@ -92,8 +93,10 @@ body {
 
 .attack-messages {
     grid-area: attack-messages;
-    grid-auto-columns: minmax(330px, 400px); /* Ancho mínimo y máximo */
-    justify-self: center; /* Centrar en la pantalla */
+    grid-auto-columns: minmax(330px, 400px);
+    /* Ancho mínimo y máximo */
+    justify-self: center;
+    /* Centrar en la pantalla */
     border-radius: 10px;
     padding: 5px;
     background-color: #DCD7C9;
@@ -102,7 +105,8 @@ body {
 .attack-messages-content {
     display: grid;
     grid-template-areas: "player-attack enemy-attack";
-    column-gap: 10px; /* Separación entre columnas */
+    column-gap: 10px;
+    /* Separación entre columnas */
     max-height: 15em;
     line-height: 1em;
     overflow-y: auto;
@@ -153,7 +157,8 @@ body {
 }
 
 /* Todas las imagenes para elegir */
-.cards, .attack-buttons {
+.cards,
+.attack-buttons {
     display: flex;
     gap: 10px;
 }
@@ -172,7 +177,7 @@ body {
     border-width: 4px;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     cursor: pointer;
 }
@@ -199,7 +204,7 @@ input {
 }
 
 /* Esto deja marcado al guerrero elegio */
-input:checked + label {
+input:checked+label {
     background-color: #DCD7C9;
     color: #3F4E4F;
 }
@@ -211,19 +216,20 @@ input:checked + label {
     border-color: #A27B5C;
     font-weight: lighter;
     font-family: 'Bangers', cursive;
-    font-size:x-large;
+    font-size: x-large;
     color: #3F4E4F;
     margin-top: 10px;
 }
 
 #p-warning-message {
     font-size: larger;
-    color:crimson;
+    color: crimson;
     background-color: #DCD7C9;
     border-radius: 5px;
     padding: 10px;
     text-align: center;
-    width: 400px;}
+    width: 400px;
+}
 
 #sec-view-map {
     flex-direction: column;
@@ -241,6 +247,18 @@ input:checked + label {
     margin-bottom: 10px;
 }
 
+#h3-info {
+    margin-block-start: 0em;
+    margin-block-end: 0.2em;
+}
+
+#p-info {
+    letter-spacing: 1px;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    font-size: smaller;
+}
+
 #sec-attack-selection {
     display: flex;
     flex-direction: column;
@@ -256,21 +274,21 @@ input:checked + label {
     border-color: #A27B5C;
     font-weight: lighter;
     font-family: 'Bangers', cursive;
-    font-size:larger;
+    font-size: larger;
     color: #3F4E4F;
 }
 
 .attack-button img {
     vertical-align: middle;
     height: 40px;
-     width: 40px;
+    width: 40px;
 }
 
 #div-messages {
     display: flex;
     flex-direction: column;
     align-items: center;
-    align-self: center;   
+    align-self: center;
     border-radius: 10px;
     width: 300px;
     background-color: #DCD7C9;
@@ -303,42 +321,56 @@ input:checked + label {
     .grid-layout {
         padding: 0px 2px;
     }
-    .title, .subtitle, #p-warning-message {
+
+    .title,
+    .subtitle,
+    #p-warning-message {
         margin-block-start: 0.4em;
         margin-block-end: 0.4em;
     }
-    .cards, .attack-buttons {
+
+    .cards,
+    .attack-buttons {
         flex-direction: column;
         gap: 4px;
     }
+
     .card {
         margin: 2px;
     }
+
     #btn-select {
         margin-top: 8px;
     }
+
     #p-warning-message {
         width: 320px;
     }
+
     .combat {
         grid-area: combat;
         display: grid;
         grid-template-areas: "messages messages"
-                             "player enemy"
-                             "attack-messages attack-messages";
+            "player enemy"
+            "attack-messages attack-messages";
         grid-template-columns: auto auto;
         grid-template-rows: 110px auto auto;
     }
+
     .messages {
         margin: 5px;
     }
+
     .img-characters {
         display: none;
     }
+
     .attack-messages-content {
         max-height: 10em;
     }
-    .player, .enemy {
+
+    .player,
+    .enemy {
         margin: 0px 0px 8px 0px;
     }
 }
