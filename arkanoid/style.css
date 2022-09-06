@@ -6,3 +6,12 @@ canvas {
     background: #eee;
     margin: 0 auto;
 }
+
+#div-message {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#spn-message {
+    margin-right: 10px;
+}

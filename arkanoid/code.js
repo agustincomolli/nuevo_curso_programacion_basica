@@ -6,11 +6,12 @@ var x = canvas.width / 2
 var y = canvas.height - 30
 
 // Dirección o velocidad de la bola.
-var dx = 2
-var dy = -2
+var dx = 5
+var dy = -5
 
 // Tamaño de la bola.
 var ball_radius = 10
+var ball_color = "red"
 
 // Definir la opciones de la pala.
 var paddle_height = 10
@@ -21,14 +22,68 @@ var right_pressed = false
 var left_pressed = false
 
 // Muro de ladrillos.
-var brick_row_count = 3
-var brick_column_count = 7
+var brick_row_count = 5
+var brick_column_count = 6
 var brick_width = 75
 var brick_height = 20
 var brick_padding = 10
-var brick_offset_top = 30
-var brick_offset_left = 30
+var brick_offset_top = 60
+var brick_offset_left = (canvas.width -
+    (brick_column_count * (brick_width + brick_padding))) / 2
 var bricks = []
+
+var score = 0
+var lives = 3
+
+var div_message = document.getElementById("div-message")
+var spn_message = document.getElementById("spn-message")
+var btn_reset = document.getElementById("btn-reset")
+
+
+function draw_lives() {
+    // Mostrar la cantidad de vidas.
+    ctx.font = "bold 14px Arial"
+    ctx.fillStyle = "blue"
+    ctx.fillText("Vidas: " + lives, canvas.width - 75, 30)
+}
+
+
+function reset_game() {
+    // Reiniciar el juego.
+    document.location.reload()
+}
+
+function mouse_move_handler(event) {
+    // Asociar el moviento de la pala con el mouse.
+
+    let relative_x = event.clientX - canvas.offsetLeft
+
+    if (relative_x > 0 && relative_x < canvas.width) {
+        paddle_x = relative_x
+    }
+}
+
+
+function get_random_color() {
+    // Genera un color aleatorio.
+    let letters = "0123456789ABCDF"
+    let color = "#"
+
+    for (index = 0; index < 6; index++) {
+        color += letters[Math.floor(Math.random() * 16)]
+    }
+
+    return color
+}
+
+
+function draw_score() {
+    // Dibujar marcador de puntos.
+    ctx.font = "bold 14px Arial"
+    ctx.fillStyle = "blue"
+    ctx.fillText("Puntos: " + score, 20, 30)
+}
+
 
 function collision_detection() {
     // Detectar las colisiones de la bola con los ladrillos.
@@ -38,11 +93,24 @@ function collision_detection() {
         for (row = 0; row < brick_row_count; row++) {
             brick = bricks[col][row]
 
+            // Si el status es 0 no detectar la colisión.
+            if (brick.status == 0) {
+                continue
+            }
+
             if ((x > brick.x) && (x < brick.x + brick_width) &&
                 (y > brick.y) && (y < brick.y + brick_height)) {
 
                 dy = -dy
                 brick.status = 0
+                score += 10
+
+                if (score == (brick_column_count * brick_row_count) * 10) {
+                    dx = 0
+                    dy = 0
+                    spn_message.innerHTML = "¡Felicitaciones, ganaste!"
+                    div_message.style.display = "block"
+                }
             }
         }
     }
@@ -55,6 +123,8 @@ function draw_bricks() {
     let brick_y = 0
     for (col = 0; col < brick_column_count; col++) {
         for (row = 0; row < brick_row_count; row++) {
+
+            // Si el status es 0 no dibujar el ladrillo.
             if (bricks[col][row].status == 0) {
                 continue
             }
@@ -76,18 +146,19 @@ function draw_bricks() {
 function draw_paddle() {
     // Dibujar paleta.
     ctx.beginPath()
-    ctx.rect(paddle_x, (canvas.height - paddle_height - 10), paddle_width, paddle_height)
+    ctx.rect(paddle_x, (canvas.height - paddle_height - 10),
+        paddle_width, paddle_height)
     ctx.fillStyle = "blue"
     ctx.fill()
     ctx.closePath()
 }
 
 
-function draw_ball() {
+function draw_ball(color) {
     // Dibujar una bola.
     ctx.beginPath()
     ctx.arc(x, y, ball_radius, 0, Math.PI * 2)
-    ctx.fillStyle = "red"
+    ctx.fillStyle = color
     ctx.fill()
     ctx.closePath()
 }
@@ -97,13 +168,17 @@ function draw() {
     // Borrar canvas.
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+    collision_detection()
+
     draw_bricks()
 
-    draw_ball()
+    draw_ball(ball_color)
 
     draw_paddle()
 
-    collision_detection()
+    draw_score()
+
+    draw_lives()
 
     // Si la bola toca el borde superior, cambiar la dirección.
     if (y + dy < ball_radius) {
@@ -113,10 +188,24 @@ function draw() {
         if (x > paddle_x && x < paddle_x + paddle_width) {
             dy = -dy
             dy
+            ball_color = get_random_color()
         } else if (y + dy > canvas.height - ball_radius) {
-            // Si toca la parte inferior, se termina el juego.
-            alert("¡Juego terminado!")
-            document.location.reload()
+            // Si toca la parte inferior, restar vida.
+            lives--
+            // Si no tiene más vidas...
+            if (!lives) {
+                dy = 0
+                dx = 0
+                spn_message.innerHTML = "¡GAME OVER!"
+                div_message.style.display = "block"
+            } else {
+                // Empezar por el medio.
+                x = canvas.width / 2
+                y = canvas.height - 30
+                dx = 5
+                dy = -5
+                paddle_x = (canvas.width - paddle_width) / 2
+            }
         }
     }
 
@@ -135,6 +224,9 @@ function draw() {
     } else if (left_pressed && paddle_x > 0) {
         paddle_x -= 7
     }
+
+    // Refrescar la pantalla.
+    requestAnimationFrame(draw)
 }
 
 
@@ -158,11 +250,10 @@ function keyup_handler(e) {
 }
 
 
-// Repintar todo cada 10 milisegundos.
-setInterval(draw, 10)
-
 document.addEventListener("keydown", keydown_handler)
 document.addEventListener("keyup", keyup_handler)
+document.addEventListener("mousemove", mouse_move_handler)
+document.addEventListener("click", reset_game)
 
 for (col = 0; col < brick_column_count; col++) {
     bricks[col] = []
@@ -170,3 +261,6 @@ for (col = 0; col < brick_column_count; col++) {
         bricks[col][row] = { x: 0, y: 0, status: 1 }
     }
 }
+
+// Pintar el canvas
+draw()
