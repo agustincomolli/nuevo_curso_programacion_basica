@@ -78,20 +78,15 @@ let player_attack = 0
 let enemy_attack = 0
 
 // Declarar objetos que contendrán los personajes a elegir.
-let knight = new Character("knight", "Caballero", "./images/knight.png", 3)
-let archer = new Character("archer", "Arquero", "./images/archer.png", 3)
-let mage = new Character("mage", "Mago", "./images/mage.png", 3)
-let rogue = new Character("rogue", "Pícaro", "./images/rogue.png", 3)
+let knight = null
+let archer = null
+let mage = null
+let rogue = null
 
 // Declarar los objetos que contendrán los enemigos.
-let skeleton_soldier = new Character("skeleton_soldier", "Esqueleto Ssoldado",
-    "./images/skeleton_soldier.png", 3, 475, 165)
-let skeleton_archer = new Character("skeleton_archer", "Esqueleto Arquero",
-    "./images/skeleton_archer.png", 3, 110, 195)
-let skeleton_mage = new Character("skeleton_mage", "Esqueleto Mago",
-    "./images/skeleton_mage.png", 3, 280, 85)
-let orc = new Character("orc", "Orco", "./images/orc.png", 4)
-let troll = new Character("troll", "Troll", "./images/troll.png", 5)
+let skeleton_soldier = null
+let skeleton_archer = null
+let skeleton_mage = null
 
 let game_map = can_map.getContext("2d")
 let map_background = new Image()
@@ -725,6 +720,57 @@ function add_enemy_skills() {
 }
 
 
+function create_characters() {
+    /* 
+        DESCRIPTION: Crea los personajes del juego, tanto jugadores como
+                     oponentes.
+    */
+
+    // Crear objetos que contendrán los personajes a elegir.
+    knight = new Character("knight", "Caballero", "./images/knight.png", 3)
+    archer = new Character("archer", "Arquero", "./images/archer.png", 3)
+    mage = new Character("mage", "Mago", "./images/mage.png", 3)
+    rogue = new Character("rogue", "Pícaro", "./images/rogue.png", 3)
+
+    // Crear los objetos que contendrán los enemigos.
+    skeleton_soldier = new Character("skeleton_soldier", "Esqueleto Ssoldado",
+        "./images/skeleton_soldier.png", 3, 475, 165)
+    skeleton_archer = new Character("skeleton_archer", "Esqueleto Arquero",
+        "./images/skeleton_archer.png", 3, 110, 195)
+    skeleton_mage = new Character("skeleton_mage", "Esqueleto Mago",
+        "./images/skeleton_mage.png", 3, 280, 85)
+
+    add_player_skills()
+    add_enemy_skills()
+
+    // Agregar todos los objetos character a la lista.
+    user_characters.push(knight, archer, mage, rogue)
+    // ... y todos los enemigos.
+    enemy_characters.push(skeleton_soldier, skeleton_archer, skeleton_mage)
+}
+
+
+function join_the_game() {
+    /* 
+        DESCRIPTION: Inicializa los elementos del html.
+    */
+
+    // fetch hace un GET (una petición para obtener algo)
+    fetch("http://localhost:8080/join")
+        // El servidor se tomará un tiempo en responder.
+        // Para eso utilizaremos el .then(func) pasándole 
+        // la respuesta del servidor como parámetro.
+        .then(function (response) {
+            if (response.ok) {
+                response.text()
+                    .then(function (new_id) {
+                        console.log(new_id)
+                    })
+            }
+        })
+}
+
+
 function init() {
     /* 
         DESCRIPTION: Inicializa los elementos del html.
@@ -743,18 +789,12 @@ function init() {
     btn_reset.style.display = "none"
     div_attack_messages.style.display = "none"
 
+    create_characters()
     fill_with_characters()
+    join_the_game()
 }
 
 
 // Agregar el EventListener "load" de window para hacer uso del js.
 window.addEventListener("load", init)
 
-add_player_skills()
-add_enemy_skills()
-
-
-// Agregar todos los objetos character a la lista.
-user_characters.push(knight, archer, mage, rogue)
-// ... y todos los enemigos.
-enemy_characters.push(skeleton_soldier, skeleton_archer, skeleton_mage)
