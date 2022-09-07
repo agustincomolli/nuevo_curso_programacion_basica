@@ -6,8 +6,8 @@ var x = canvas.width / 2
 var y = canvas.height - 30
 
 // Dirección o velocidad de la bola.
-var dx = 5
-var dy = -5
+var dx = 2
+var dy = -2
 
 // Tamaño de la bola.
 var ball_radius = 10
@@ -23,7 +23,7 @@ var left_pressed = false
 
 // Muro de ladrillos.
 var brick_row_count = 5
-var brick_column_count = 6
+var brick_column_count = 7
 var brick_width = 75
 var brick_height = 20
 var brick_padding = 10
@@ -43,7 +43,7 @@ var btn_reset = document.getElementById("btn-reset")
 function draw_lives() {
     // Mostrar la cantidad de vidas.
     ctx.font = "bold 14px Arial"
-    ctx.fillStyle = "blue"
+    ctx.fillStyle = "#EEEEEE"
     ctx.fillText("Vidas: " + lives, canvas.width - 75, 30)
 }
 
@@ -80,7 +80,7 @@ function get_random_color() {
 function draw_score() {
     // Dibujar marcador de puntos.
     ctx.font = "bold 14px Arial"
-    ctx.fillStyle = "blue"
+    ctx.fillStyle = "#EEEEEE"
     ctx.fillText("Puntos: " + score, 20, 30)
 }
 
@@ -104,12 +104,15 @@ function collision_detection() {
                 dy = -dy
                 brick.status = 0
                 score += 10
+                // Aumentar la velocidad.
+                dx += 0.5
+                dy += 0.5
 
                 if (score == (brick_column_count * brick_row_count) * 10) {
                     dx = 0
                     dy = 0
                     spn_message.innerHTML = "¡Felicitaciones, ganaste!"
-                    div_message.style.display = "block"
+                    div_message.style.display = "flex"
                 }
             }
         }
@@ -135,7 +138,7 @@ function draw_bricks() {
             bricks[col][row].y = brick_y
             ctx.beginPath()
             ctx.rect(brick_x, brick_y, brick_width, brick_height)
-            ctx.fillStyle = "lightblue"
+            ctx.fillStyle = "#00ADB5"
             ctx.fill()
             ctx.closePath()
         }
@@ -148,7 +151,7 @@ function draw_paddle() {
     ctx.beginPath()
     ctx.rect(paddle_x, (canvas.height - paddle_height - 10),
         paddle_width, paddle_height)
-    ctx.fillStyle = "blue"
+    ctx.fillStyle = "#EEEEEE"
     ctx.fill()
     ctx.closePath()
 }
@@ -197,13 +200,11 @@ function draw() {
                 dy = 0
                 dx = 0
                 spn_message.innerHTML = "¡GAME OVER!"
-                div_message.style.display = "block"
+                div_message.style.display = "flex"
             } else {
                 // Empezar por el medio.
                 x = canvas.width / 2
                 y = canvas.height - 30
-                dx = 5
-                dy = -5
                 paddle_x = (canvas.width - paddle_width) / 2
             }
         }
@@ -250,10 +251,12 @@ function keyup_handler(e) {
 }
 
 
+div_message.style.display = "none"
+
 document.addEventListener("keydown", keydown_handler)
 document.addEventListener("keyup", keyup_handler)
 document.addEventListener("mousemove", mouse_move_handler)
-document.addEventListener("click", reset_game)
+btn_reset.addEventListener("click", reset_game)
 
 for (col = 0; col < brick_column_count; col++) {
     bricks[col] = []
