@@ -6,6 +6,8 @@ const cors = require("cors")
 // Crear una instancia del servplayer_idor Express.
 const app = express()
 
+const players = []
+
 // Usar librería cors.
 app.use(cors())
 // Usar las opciones de express para JSON.
@@ -33,16 +35,13 @@ class Character {
 }
 
 
-const players = []
-
 // En una petición responder con un player_id.
 app.get("/join", (req, res) => {
     const player_id = `${Math.random()}`
     const player = new Player(player_id)
 
     players.push(player)
-    console.log(players)
-    
+
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.send(player_id)
 })
@@ -52,9 +51,8 @@ app.post("/character/:player_id", (req, res) => {
     const player_name = req.body.player_name || ""
     const character = new Character(player_name)
 
-    const player_index = players.findIndex((player) => {
-        player.player_id == player_id
-    })
+    const player_index = players.findIndex((player) =>
+        player.player_id === player_id)
 
     if (player_index >= 0) {
         players[player_index].asign_character(character)
@@ -62,6 +60,7 @@ app.post("/character/:player_id", (req, res) => {
 
     console.log(players)
     console.log(player_id)
+    console.log(players[0].character.name)
     // Termino de responder.
     res.end()
 })

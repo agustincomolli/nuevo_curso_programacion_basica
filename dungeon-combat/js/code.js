@@ -390,7 +390,7 @@ function initialize_map() {
 }
 
 
-function send_player_to_backend(player) {
+function send_player_to_backend(name) {
     /* 
         DESCRIPTION: Envía el nombre del jugador al backend.
         PARAMETERS:  player_name = nombre del jugador elegido.
@@ -402,7 +402,7 @@ function send_player_to_backend(player) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            player_name: player
+            player_name: name
         })
     })
 }
