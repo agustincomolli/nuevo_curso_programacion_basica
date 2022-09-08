@@ -70,8 +70,9 @@ const img_enemy = document.getElementById("img-enemy")
 const can_map = document.getElementById("can-map")
 
 // Declarar variables de uso general.
-let user_characters = []    // Contendrá los personajes a elegir.
-let enemy_characters = []   // Contendrá los enemigos a elegir.
+let user_characters = []    // Tendrá los personajes a elegir.
+let enemy_characters = []   // Tendrá los enemigos a elegir.
+let player_id = null // Tendrá el id enviado desde el backend
 let player_character = null
 let enemy_character = null
 let player_attack = 0
@@ -389,6 +390,24 @@ function initialize_map() {
 }
 
 
+function send_player_to_backend(player) {
+    /* 
+        DESCRIPTION: Envía el nombre del jugador al backend.
+        PARAMETERS:  player_name = nombre del jugador elegido.
+    */
+
+    fetch(`http://localhost:8080/character/${player_id}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            player_name: player
+        })
+    })
+}
+
+
 function select_warrior() {
     /* 
         DESCRIPTION: Selecciona el personaje del jugador.
@@ -410,10 +429,13 @@ function select_warrior() {
         return // Salir de la función.
     }
 
-    // Mostrar la imágen del personaje elegido buscando en la lista de
-    // user_character el personaje que coincida con el elegido por el usuario.
+    // Obtener el objeto del personaje elegido.
     player_character = user_characters.find(character => character.name ===
         warrior_selected)
+
+    send_player_to_backend(player_character.name)
+
+    // Mostrar la imágen del personaje elegido.
     img_player.src = player_character.image
     img_player.alt = player_character.name
 
@@ -764,7 +786,7 @@ function join_the_game() {
             if (response.ok) {
                 response.text()
                     .then(function (new_id) {
-                        console.log(new_id)
+                        player_id = new_id
                     })
             }
         })
