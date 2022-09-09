@@ -252,6 +252,62 @@ function detect_colision(player, enemy) {
 }
 
 
+function create_opponents_online(type) {
+    /* 
+        DESCRIPTION: Crear los objetos de jugadores online.
+    */
+
+    user_characters.forEach((character) => {
+        if (character.id == type) {
+            let opponent = new Character(
+                character.id,
+                character.name,
+                `./images/${type}_enemy.png`,
+                character.health,
+                475,
+                115
+            )
+
+            opponent.attacks_skills = character.attacks_skills
+
+            enemy_characters.push(opponent)
+        }
+    })
+
+}
+
+
+function send_position(player_x, player_y) {
+    /* 
+        DESCRIPTION: Envía al servidor la posición del jugador.
+        PARAMETERS: player_x, player_y = integers que son las coordenadas
+                    de X y de Y del personaje elegido.
+    */
+
+    fetch(`http://localhost:8080/character/${player_id}/position`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            player_x,
+            player_y
+        })
+    })
+        .then(function (res) {
+            if (res.ok) {
+                res.json()
+                    .then(function ({ opponents }) {
+                        opponents.forEach((opponent) => {
+                            const opponent_type = opponent.character.type || ""
+                            create_opponents_online(opponent_type)
+                        })
+                    })
+            }
+        })
+}
+
+
 function is_in_border() {
     /* 
         DESCRIPTION: Detectar colisión del personaje con los bordes del canvas.
@@ -297,6 +353,7 @@ function draw_canvas() {
 
     // Dibujar el personaje elegido.
     player_character.draw_character(game_map)
+    send_position(player_character.x, player_character.y)
 
     // Dibujar a los enemigos.
     enemy_characters.forEach(enemy => {
@@ -390,7 +447,7 @@ function initialize_map() {
 }
 
 
-function send_player_to_backend(name) {
+function send_player_to_backend(id) {
     /* 
         DESCRIPTION: Envía el nombre del jugador al backend.
         PARAMETERS:  player_name = nombre del jugador elegido.
@@ -402,7 +459,7 @@ function send_player_to_backend(name) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            player_name: name
+            player_type: id
         })
     })
 }
@@ -433,7 +490,7 @@ function select_warrior() {
     player_character = user_characters.find(character => character.name ===
         warrior_selected)
 
-    send_player_to_backend(player_character.name)
+    send_player_to_backend(player_character.id)
 
     // Mostrar la imágen del personaje elegido.
     img_player.src = player_character.image
