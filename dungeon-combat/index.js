@@ -63,6 +63,7 @@ app.post("/character/:player_id", (req, res) => {
     if (player_index >= 0) {
         players[player_index].asign_character(character_type)
     }
+    console.log(players)
 
     // Termino de responder.
     res.end()

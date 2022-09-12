@@ -3,8 +3,9 @@ class Character {
                     como los personajes enemigos.
     */
 
-    constructor(id, name, image, health, x = 295, y = 415) {
+    constructor(type, name, image, health, x = 295, y = 400, id = null) {
         this.id = id
+        this.type = type
         this.name = name
         this.image = image
         this.health = health
@@ -252,27 +253,58 @@ function detect_colision(player, enemy) {
 }
 
 
-function create_opponents_online(type) {
+function create_opponents_online(player_enemy) {
     /* 
         DESCRIPTION: Crear los objetos de jugadores online.
     */
 
-    user_characters.forEach((character) => {
-        if (character.id == type) {
-            let opponent = new Character(
-                character.id,
-                character.name,
-                `./images/${type}_enemy.png`,
-                character.health,
-                475,
-                115
-            )
+    let enemy_exist = false
 
-            opponent.attacks_skills = character.attacks_skills
-
-            enemy_characters.push(opponent)
+    if (enemy_characters.length > 0) {
+        enemy_exist = enemy_characters.find(
+            enemy => enemy.id === player_enemy.player_id
+        )
+        if (enemy_exist) {
+            return
         }
-    })
+    }
+
+    let player_found = user_characters.find(character =>
+        character.type === player_enemy.character.type)
+
+    player_found.id = player_enemy.id
+    player_found.img_enemy = `./images/${player_found.type}_enemy.png`
+    player_found.x = player_enemy.x
+    player_found.y = player_enemy.y
+    enemy_characters.push(player_found)
+
+    /*     let opponent = new Character(
+            player_found.type,
+            player_found.name,
+            `./images/${type}_enemy.png`,
+            player_found .health,
+            player_enemy.x,
+            player_enemy.y)
+        opponent.attacks_skills = player_found.attacks_skills
+        console.log(opponent)
+        enemy_characters.push(opponent)
+     */
+    /*     user_characters.forEach((character) => {
+                if (character.type == player_enemy.character.type) {
+                    let opponent = new Character(
+                        character.type,
+                        character.name,
+                        `./images/${type}_enemy.png`,
+                        character.health,
+                        player_enemy.x,
+                        player_enemy.y
+                    )
+    
+                    opponent.attacks_skills = character.attacks_skills
+    
+                    enemy_characters.push(opponent)
+                }
+            }) */
 
 }
 
@@ -299,8 +331,7 @@ function send_position(player_x, player_y) {
                 res.json()
                     .then(function ({ opponents }) {
                         opponents.forEach((opponent) => {
-                            const opponent_type = opponent.character.type || ""
-                            create_opponents_online(opponent_type)
+                            create_opponents_online(opponent)
                         })
                     })
             }
@@ -438,8 +469,8 @@ function initialize_map() {
 
     interval = setInterval(draw_canvas, 50)
 
-    can_map.width = 640
-    can_map.height = 480
+    can_map.width = 613
+    can_map.height = 460
     map_background.src = "./images/map.png"
     // Agregar manejador de eventos para el mapa.
     document.addEventListener("keydown", check_key_pressed)
@@ -447,19 +478,18 @@ function initialize_map() {
 }
 
 
-function send_player_to_backend(id) {
+function send_player_to_backend() {
     /* 
         DESCRIPTION: Envía el nombre del jugador al backend.
-        PARAMETERS:  player_name = nombre del jugador elegido.
     */
 
-    fetch(`http://localhost:8080/character/${player_id}`, {
+    fetch(`http://localhost:8080/character/${player_character.id}`, {
         method: "post",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            player_type: id
+            player_type: player_character.type
         })
     })
 }
@@ -477,7 +507,8 @@ function select_warrior() {
     // Recorrer la lista para ver cuál está seleccionado.
     rd_character_list.forEach((character) => {
         if (character.checked) {
-            warrior_selected = character.name
+            warrior_selected = character.id.slice(3)
+            return
         }
     })
 
@@ -487,10 +518,13 @@ function select_warrior() {
     }
 
     // Obtener el objeto del personaje elegido.
-    player_character = user_characters.find(character => character.name ===
+    player_character = user_characters.find(character => character.type ===
         warrior_selected)
 
-    send_player_to_backend(player_character.id)
+    join_the_game()
+    send_player_to_backend()
+
+    player_character.id = player_id
 
     // Mostrar la imágen del personaje elegido.
     img_player.src = player_character.image
@@ -564,7 +598,9 @@ function translate_attack(attack_number, attack_list) {
         DESCRIPTION: Devuelve el nombre del ataque según se su número.
     */
 
-    let selected_attack = attack_list.find(skill => skill.value === attack_number).description
+    let selected_attack = attack_list.find(
+        skill => skill.value === attack_number
+    ).description
 
     return selected_attack
 }
@@ -682,9 +718,11 @@ function fill_with_characters() {
     user_characters.forEach((character) => {
         // Crear un template literario usando las comillas invertidas `` que
         // tendrá los elementos que forman al personaje a elegir.
+        // Todos los input radio tienen que tener el mismo nombre para que
+        // cuando se seleccione uno, los otros se deseleccionen.
         player_card = `
-        <input type="radio" name="${character.name}" id="rd-${character.id}">
-        <label class="card" for="rd-${character.id}">
+        <input type="radio" name="character" id="rd-${character.type}">
+        <label class="card" for="rd-${character.type}">
             <img src="${character.image}" alt="${character.name}">
             <p>${character.name}</p>
         </label>
@@ -805,11 +843,14 @@ function create_characters() {
                      oponentes.
     */
 
+    let x = get_random_number(0, can_map.width - 60) // 60 es el ancho del personaje.
+    let y = get_random_number(0, can_map.height - 60)
+
     // Crear objetos que contendrán los personajes a elegir.
-    knight = new Character("knight", "Caballero", "./images/knight.png", 3)
-    archer = new Character("archer", "Arquero", "./images/archer.png", 3)
-    mage = new Character("mage", "Mago", "./images/mage.png", 3)
-    rogue = new Character("rogue", "Pícaro", "./images/rogue.png", 3)
+    knight = new Character("knight", "Caballero", "./images/knight.png", 3, x, y)
+    archer = new Character("archer", "Arquero", "./images/archer.png", 3, x, y)
+    mage = new Character("mage", "Mago", "./images/mage.png", 3, x, y)
+    rogue = new Character("rogue", "Pícaro", "./images/rogue.png", 3, x, y)
 
     // Crear los objetos que contendrán los enemigos.
     skeleton_soldier = new Character("skeleton_soldier", "Esqueleto Ssoldado",
@@ -825,7 +866,7 @@ function create_characters() {
     // Agregar todos los objetos character a la lista.
     user_characters.push(knight, archer, mage, rogue)
     // ... y todos los enemigos.
-    enemy_characters.push(skeleton_soldier, skeleton_archer, skeleton_mage)
+    //enemy_characters.push(skeleton_soldier, skeleton_archer, skeleton_mage)
 }
 
 
@@ -870,7 +911,6 @@ function init() {
 
     create_characters()
     fill_with_characters()
-    join_the_game()
 }
 
 
