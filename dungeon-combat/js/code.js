@@ -253,58 +253,38 @@ function detect_colision(player, enemy) {
 }
 
 
-function create_opponents_online(player_enemy) {
+function create_opponents_online(opponent) {
     /* 
         DESCRIPTION: Crear los objetos de jugadores online.
+        PARAMETERS: opponent = es el objeto traído del backend que contiene
+                    a un oponente en el juego
     */
 
-    let enemy_exist = false
+    // Busca si el oponente ya existe en la lista de enemigos...
+    let enemy_exist = enemy_characters.find((character) =>
+        character.id === opponent.player_id)
+    //Si el oponente existe no volver a crearlo.
+    if (enemy_exist != undefined) return
 
-    if (enemy_characters.length > 0) {
-        enemy_exist = enemy_characters.find(
-            enemy => enemy.id === player_enemy.player_id
-        )
-        if (enemy_exist) {
-            return
-        }
-    }
+    // Buscar en la lista de personajes, cual es el del oponente elegido.
+    let player_found = user_characters.find((character) =>
+        character.type === opponent.character.type)
 
-    let player_found = user_characters.find(character =>
-        character.type === player_enemy.character.type)
+    let new_opponent = new Character(
+        player_found.type,
+        player_found.name,
+        `./images/${player_found.type}_enemy.png`,
+        player_found.health,
+        opponent.x,
+        opponent.y,
+        opponent.player_id,
+    )
+    opponent.attacks_skills = player_found.attacks_skills
+    enemy_characters.push(new_opponent)
 
-    player_found.id = player_enemy.id
-    player_found.img_enemy = `./images/${player_found.type}_enemy.png`
-    player_found.x = player_enemy.x
-    player_found.y = player_enemy.y
-    enemy_characters.push(player_found)
+    console.log("Nuevo oponente agregado: " + new_opponent)
 
-    /*     let opponent = new Character(
-            player_found.type,
-            player_found.name,
-            `./images/${type}_enemy.png`,
-            player_found .health,
-            player_enemy.x,
-            player_enemy.y)
-        opponent.attacks_skills = player_found.attacks_skills
-        console.log(opponent)
-        enemy_characters.push(opponent)
-     */
-    /*     user_characters.forEach((character) => {
-                if (character.type == player_enemy.character.type) {
-                    let opponent = new Character(
-                        character.type,
-                        character.name,
-                        `./images/${type}_enemy.png`,
-                        character.health,
-                        player_enemy.x,
-                        player_enemy.y
-                    )
-    
-                    opponent.attacks_skills = character.attacks_skills
-    
-                    enemy_characters.push(opponent)
-                }
-            }) */
+    new_opponent.draw_character(game_map)
 
 }
 
@@ -331,6 +311,7 @@ function send_position(player_x, player_y) {
                 res.json()
                     .then(function ({ opponents }) {
                         opponents.forEach((opponent) => {
+                            if (opponent.character == null) return
                             create_opponents_online(opponent)
                         })
                     })
@@ -521,9 +502,6 @@ function select_warrior() {
     player_character = user_characters.find(character => character.type ===
         warrior_selected)
 
-    join_the_game()
-    send_player_to_backend()
-
     player_character.id = player_id
 
     // Mostrar la imágen del personaje elegido.
@@ -536,7 +514,9 @@ function select_warrior() {
     sec_player_selection.style.display = "none"
     // Mostrar la sección del mapa.
     sec_view_map.style.display = "flex"
+
     initialize_map()
+    send_player_to_backend()
 
 }
 
@@ -884,6 +864,7 @@ function join_the_game() {
             if (response.ok) {
                 response.text()
                     .then(function (new_id) {
+                        console.log(new_id)
                         player_id = new_id
                     })
             }
@@ -911,6 +892,7 @@ function init() {
 
     create_characters()
     fill_with_characters()
+    join_the_game()
 }
 
 

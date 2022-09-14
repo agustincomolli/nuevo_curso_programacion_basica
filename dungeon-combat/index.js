@@ -20,6 +20,7 @@ class Player {
 
     constructor(player_id) {
         this.player_id = player_id
+        this.character = null
     }
 
     asign_character(character) {
@@ -49,6 +50,8 @@ app.get("/join", (req, res) => {
 
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.send(player_id)
+    
+    console.log("\nNuevo id asignado: " + player_id)
 })
 
 // Envío al servidor del Id del jugador y de su nombre.
@@ -63,7 +66,8 @@ app.post("/character/:player_id", (req, res) => {
     if (player_index >= 0) {
         players[player_index].asign_character(character_type)
     }
-    console.log(players)
+    console.log("\nId. del jugador: " + player_id)
+    console.log("Jugador elegido: " +  players[player_index].character.type)
 
     // Termino de responder.
     res.end()
@@ -81,6 +85,9 @@ app.post("/character/:player_id/position", (req, res) => {
     if (player_index >= 0) {
         players[player_index].update_position(player_x, player_y)
     }
+
+    //console.log("\nPosición del id: " + player_id)
+    //console.log("x: " + player_x + " y: " + player_y)
 
     // Crear una lista con los jugadores menos el que envió la solicitud.
     const opponents = players.filter((player) => player.player_id != player_id)
