@@ -261,31 +261,34 @@ function create_opponents_online(opponent) {
     */
 
     // Busca si el oponente ya existe en la lista de enemigos...
-    let enemy_exist = enemy_characters.find((character) =>
+    let opponent_online = enemy_characters.find((character) =>
         character.id === opponent.player_id)
+
     //Si el oponente existe no volver a crearlo.
-    if (enemy_exist != undefined) return
+    if (opponent_online == undefined) {
+        // Buscar en la lista de personajes, cual es el del oponente elegido.
+        let player_found = user_characters.find((character) =>
+            character.type === opponent.character.type)
 
-    // Buscar en la lista de personajes, cual es el del oponente elegido.
-    let player_found = user_characters.find((character) =>
-        character.type === opponent.character.type)
+        opponent_online = new Character(
+            player_found.type,
+            player_found.name,
+            `./images/${player_found.type}_enemy.png`,
+            player_found.health,
+            opponent.x,
+            opponent.y,
+            opponent.player_id,
+        )
+        opponent_online.attacks_skills = player_found.attacks_skills
+        enemy_characters.push(opponent_online)
 
-    let new_opponent = new Character(
-        player_found.type,
-        player_found.name,
-        `./images/${player_found.type}_enemy.png`,
-        player_found.health,
-        opponent.x,
-        opponent.y,
-        opponent.player_id,
-    )
-    opponent.attacks_skills = player_found.attacks_skills
-    enemy_characters.push(new_opponent)
-
-    console.log("Nuevo oponente agregado: " + new_opponent)
-
-    new_opponent.draw_character(game_map)
-
+        console.log("Nuevo oponente agregado: " + opponent_online.type)
+    } else {
+        // Actualizar posición del enemigo.
+        opponent_online.x = opponent.x
+        opponent_online.y = opponent.y
+    }
+    opponent_online.draw_character(game_map)
 }
 
 
@@ -328,13 +331,15 @@ function is_in_border() {
     if (player_character.y + player_character.speed_y < 0) {
         return true
     }
-    if (player_character.y + player_character.speed_y > can_map.height - player_character.height) {
+    if (player_character.y + player_character.speed_y > can_map.height -
+        player_character.height) {
         return true
     }
     if (player_character.x + player_character.speed_x < 0) {
         return true
     }
-    if (player_character.x + player_character.speed_x > can_map.width - player_character.width) {
+    if (player_character.x + player_character.speed_x > can_map.width -
+        player_character.width) {
         return true
     }
 }
@@ -864,7 +869,7 @@ function join_the_game() {
             if (response.ok) {
                 response.text()
                     .then(function (new_id) {
-                        console.log(new_id)
+                        console.log("Id. asignado: " + new_id)
                         player_id = new_id
                     })
             }
