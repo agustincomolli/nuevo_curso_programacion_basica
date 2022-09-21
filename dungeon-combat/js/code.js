@@ -267,19 +267,19 @@ function create_opponents_online(opponent) {
     //Si el oponente existe no volver a crearlo.
     if (opponent_online == undefined) {
         // Buscar en la lista de personajes, cual es el del oponente elegido.
-        let player_found = user_characters.find((character) =>
+        let player_template = user_characters.find((character) =>
             character.type === opponent.character.type)
 
         opponent_online = new Character(
-            player_found.type,
-            player_found.name,
-            `./images/${player_found.type}_enemy.png`,
-            player_found.health,
+            player_template.type,
+            player_template.name,
+            `./images/${player_template.type}_enemy.png`,
+            player_template.health,
             opponent.x,
             opponent.y,
             opponent.player_id,
         )
-        opponent_online.attacks_skills = player_found.attacks_skills
+        opponent_online.attacks_skills = player_template.attacks_skills
         enemy_characters.push(opponent_online)
 
         console.log("Nuevo oponente agregado: " + opponent_online.type)
