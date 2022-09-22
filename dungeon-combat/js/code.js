@@ -376,9 +376,7 @@ function draw_canvas() {
     enemy_characters.forEach(enemy => {
         enemy.draw_character(game_map)
         // Detectar si se produce una colisión.
-        if (player_character.speed_x !== 0 || player_character.speed_y !== 0) {
-            detect_colision(player_character, enemy)
-        }
+        detect_colision(player_character, enemy)
     })
 
 }
@@ -538,6 +536,9 @@ function lets_combat(player_attack, enemy_attack) {
     */
     let result = 0
 
+    // Limpiar el temporizador para que no se siga ejecutando.
+    clearInterval(interval)
+
     if (player_attack == enemy_attack) {
         result = 0
     } else if (player_attack == 1 && enemy_attack == 3) {
@@ -650,6 +651,59 @@ function show_status(match_result) {
 }
 
 
+function get_enemy_attack() {
+    /* 
+        DESCRIPTION: Pide al servidor el ataque que seleccionó el enemigo.
+    */
+
+    let match_result = 0
+
+
+    fetch(`http://localhost:8080/character/${enemy_character.id}/attacks`)
+        .then(function (res) {
+            if (res.ok) {
+                res.json()
+                    .then(function ({ enemy_attack_selected }) {
+                        if (enemy_attack_selected != 0) {
+                            enemy_attack = enemy_attack_selected
+                            console.log("Ataque jugador: "+ player_attack)
+                            console.log("Ataque enemigo:" + enemy_attack_selected)
+
+                            match_result = lets_combat(player_attack, enemy_attack)
+
+                            // Mostrar mensajes de estado.
+                            show_status(match_result)
+
+                        }
+                    })
+            }
+        })
+
+}
+
+
+function send_attack_to_backend(attack) {
+    /* 
+        DESCRIPTION: Envía el ataque seleccionado al backend.
+        PARAMETERS: attack = es el número que identifica el ataque 
+                    seleccionado.
+    */
+
+    fetch(`http://localhost:8080/character/${player_id}/attacks`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            attack
+        })
+    })
+
+    interval = setInterval(get_enemy_attack, 50)
+
+}
+
+
 function attack(event) {
     /* 
         DESCRIPTION: Selecciona el ataque del jugador según el botón 
@@ -659,8 +713,7 @@ function attack(event) {
                      resultado.
     */
 
-    let match_result = 0
-    // Buscar em la lista de skills del personaje cuál es el valor del ataque.
+    // Buscar en la lista de skills del personaje cuál es el valor del ataque.
     let attack_id = event.currentTarget.id.slice(4)
     player_attack = player_character.attacks_skills.find(
         skill => skill.id === attack_id).value
@@ -670,13 +723,10 @@ function attack(event) {
         div_attack_messages.style.display = "grid"
     }
 
+    send_attack_to_backend(player_attack)
+
     // Generar un número entre 1 y 3 que representará el ataque enemigo:
-    enemy_attack = get_random_number(1, 3)
-
-    match_result = lets_combat(player_attack, enemy_attack)
-
-    // Mostrar mensajes de estado.
-    show_status(match_result)
+    //enemy_attack = get_random_number(1, 3)
 }
 
 

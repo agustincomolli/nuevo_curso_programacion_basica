@@ -31,6 +31,10 @@ class Player {
         this.x = x
         this.y = y
     }
+
+    asign_attack(attack) {
+        this.attack = attack
+    }
 }
 
 
@@ -86,13 +90,38 @@ app.post("/character/:player_id/position", (req, res) => {
         players[player_index].update_position(player_x, player_y)
     }
 
-    //console.log("\nPosición del id: " + player_id)
-    //console.log("x: " + player_x + " y: " + player_y)
-
-    // Crear una lista con los jugadores menos el que envió la solicitud.
+     // Crear una lista con los jugadores menos el que envió la solicitud.
     const opponents = players.filter((player) => player.player_id != player_id)
     // Devolver la lista de oponentes.
     res.send({opponents})
+})
+
+// Envío al servidor del Id del jugador y el ataque elegido.
+app.post("/character/:player_id/attacks", (req, res) => {
+    const player_id = req.params.player_id || ""
+    const player_attack = req.body.attack || 0
+
+    const player_index = players.findIndex((player) =>
+        player.player_id === player_id)
+
+    if (player_index >= 0) {
+        players[player_index].asign_attack(player_attack)
+    }
+    console.log("\nId. del jugador: " + player_id)
+    console.log("Ataque  elegido: " +  player_attack)
+
+    // Termino de responder.
+    res.end()
+})
+
+// Petición al servidor del ataque enemigo.
+app.get("/character/:player_id/attacks", (req, res) => {
+    const player_id = req.params.player_id || ""
+    const player = players.find((player) => player.player_id === player_id)
+    res.send({
+        enemy_attack_selected: player.attack || 0
+    })
+    player.attack = 0
 })
 
 // Escuchar las peticiones de los clientes en el puerto 8080.
