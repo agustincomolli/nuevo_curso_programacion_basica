@@ -8,6 +8,9 @@ const app = express()
 
 const players = []
 
+// Establecer la carpeta public como servidor para que puedan acceder 
+// los clientes de la red.
+app.use(express.static("public"))
 // Usar librería cors.
 app.use(cors())
 // Usar las opciones de express para JSON.

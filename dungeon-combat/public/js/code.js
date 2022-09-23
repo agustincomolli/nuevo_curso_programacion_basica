@@ -299,7 +299,7 @@ function send_position(player_x, player_y) {
                     de X y de Y del personaje elegido.
     */
 
-    fetch(`http://localhost:8080/character/${player_id}/position`, {
+    fetch(`http://NTB-AGUSTIN-02.local:8080/character/${player_id}/position`, {
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -467,7 +467,7 @@ function send_player_to_backend() {
         DESCRIPTION: Envía el nombre del jugador al backend.
     */
 
-    fetch(`http://localhost:8080/character/${player_character.id}`, {
+    fetch(`http://NTB-AGUSTIN-02.local:8080/character/${player_character.id}`, {
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -659,7 +659,7 @@ function get_enemy_attack() {
     let match_result = 0
 
 
-    fetch(`http://localhost:8080/character/${enemy_character.id}/attacks`)
+    fetch(`http://NTB-AGUSTIN-02.local:8080/character/${enemy_character.id}/attacks`)
         .then(function (res) {
             if (res.ok) {
                 res.json()
@@ -689,7 +689,7 @@ function send_attack_to_backend(attack) {
                     seleccionado.
     */
 
-    fetch(`http://localhost:8080/character/${player_id}/attacks`, {
+    fetch(`http://NTB-AGUSTIN-02.local:8080/character/${player_id}/attacks`, {
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -911,7 +911,7 @@ function join_the_game() {
     */
 
     // fetch hace un GET (una petición para obtener algo)
-    fetch("http://localhost:8080/join")
+    fetch("http://NTB-AGUSTIN-02.local:8080/join")
         // El servidor se tomará un tiempo en responder.
         // Para eso utilizaremos el .then(func) pasándole 
         // la respuesta del servidor como parámetro.
