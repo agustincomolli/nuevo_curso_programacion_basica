@@ -57,7 +57,7 @@ app.get("/join", (req, res) => {
 
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.send(player_id)
-    
+
     console.log("\nNuevo id asignado: " + player_id)
 })
 
@@ -74,7 +74,7 @@ app.post("/character/:player_id", (req, res) => {
         players[player_index].asign_character(character_type)
     }
     console.log("\nId. del jugador: " + player_id)
-    console.log("Jugador elegido: " +  players[player_index].character.type)
+    console.log("Jugador elegido: " + players[player_index].character.type)
 
     // Termino de responder.
     res.end()
@@ -93,10 +93,10 @@ app.post("/character/:player_id/position", (req, res) => {
         players[player_index].update_position(player_x, player_y)
     }
 
-     // Crear una lista con los jugadores menos el que envió la solicitud.
+    // Crear una lista con los jugadores menos el que envió la solicitud.
     const opponents = players.filter((player) => player.player_id != player_id)
     // Devolver la lista de oponentes.
-    res.send({opponents})
+    res.send({ opponents })
 })
 
 // Envío al servidor del Id del jugador y el ataque elegido.
@@ -111,7 +111,7 @@ app.post("/character/:player_id/attacks", (req, res) => {
         players[player_index].asign_attack(player_attack)
     }
     console.log("\nId. del jugador: " + player_id)
-    console.log("Ataque  elegido: " +  player_attack)
+    console.log("Ataque  elegido: " + player_attack)
 
     // Termino de responder.
     res.end()
@@ -125,6 +125,22 @@ app.get("/character/:player_id/attacks", (req, res) => {
         enemy_attack_selected: player.attack || 0
     })
     player.attack = 0
+})
+
+// Reiniciar el juego.
+app.get("/character/:player_id/clear", (req, res) => {
+    const player_id = req.params.player_id || ""
+    const player_index = players.findIndex((player) =>
+        player.player_id === player_id)
+    
+    // Borrar el jugador de la lista.
+    players.splice(player_index, 1)
+
+    // Crear el jugador nuevo con su mismo id.
+    const player = new Player(player_id)
+    players.push(player)
+
+    res.send(player_id)
 })
 
 // Escuchar las peticiones de los clientes en el puerto 8080.

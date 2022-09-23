@@ -735,9 +735,20 @@ function reset_game() {
         DESCRIPTION: Reinicia todas las opciones para jugar otra vez.
     */
 
-    // window.location.reload() recarga la página devolviendo el html 
+    fetch(`http://NTB-AGUSTIN-02.local:8080/character/${player_id}/clear`)
+        .then((res) => {
+            if (res.ok) {
+                res.text()
+                    .then( (id) => {
+                        player_id = id
+                    })
+            }
+        })
+    
+        // window.location.reload() recarga la página devolviendo el html 
     // original.
     location.reload()
+
 }
 
 
